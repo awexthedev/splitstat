@@ -1,10 +1,11 @@
 const discord = require('discord.js');
+const { Client, Intents } = require('discord.js');
 const fetch = require('node-fetch')
 const fs = require('fs');
 require('dotenv').config();
 
 const prefix = 'spl!';
-const client = new discord.Client();
+const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES] });
 
 const token = process.env.DISCORD_TOKEN
 
@@ -16,13 +17,12 @@ for(const file of commands) {
     client.commands.set(command.name, command);
 }
 
-
 client.once('ready', async () => {
-    console.log(`SplitStat is up and running!`)
+    console.log(`SplitStat is up and running! Logged in as ${client.user.tag}.`)
     client.user.setActivity(`spl!help`)
 })
 
-client.on('message', message => {
+client.on('messageCreate', message => {
     if(!message.content.startsWith(prefix) || message.author.bot) return;
 
     const args = message.content.slice(prefix.length).split(/ +/);

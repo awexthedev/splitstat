@@ -6,10 +6,10 @@ module.exports = {
         .setTitle(`SplitStat`)
         .setColor(`#2c1178`)
         .setDescription(`SplitStat is a Discord bot that fetches stats from the [Tracker Network](https://tracker.gg) and returns them to you!\n
-    To get started, run **spl!stat [your-steam64-decid]** (see **spl!idhelp** to learn how to find the decid) and test it out!\n\n**Note**: SplitStat is not affiliated with 1047 Games or the Tracker Network.`)
+    To get started, run **spl!stat [your-steam-vanityurl]** (see **spl!idhelp** to learn how to find the vanity url) and test it out!\n\n**Note**: SplitStat is not affiliated with 1047 Games or the Tracker Network.`)
         .setFooter(`SplitStat`)
         .setTimestamp();
 
-        message.channel.send(helpEmbed)
+        message.channel.send({ embeds: [helpEmbed] })
     }
 }

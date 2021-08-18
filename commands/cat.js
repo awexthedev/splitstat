@@ -16,6 +16,6 @@ module.exports = {
         .setFooter(`SplitStat`)
         .setTimestamp();
 
-        return message.channel.send(catEmbed)
+        return message.channel.send({ embeds: [catEmbed] })
     }
 }
