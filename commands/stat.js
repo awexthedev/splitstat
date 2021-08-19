@@ -1,6 +1,9 @@
-const fetch = require('node-fetch');
+var fetch = require('node-fetch');
+var uuid = require("uuid");
+var config = require('../config.json')
 
 var global = {}
+error = false;
 
 module.exports = {
     name: 'stat',
@@ -17,17 +20,18 @@ module.exports = {
         } else {
             const username = args.slice(0).join(' ');
 
+            await getSteamId(username);
             if(global.msg === `No match`) {
-                return message.channel.send(`Sorry, but that Steam Vanity URL had no match via Steam's API. Please make sure you're using the value you set for your **custom URL**, not the entire URL.`)
+                return message.channel.send(`Sorry, but that Steam Vanity URL had no match via Steam's API. Please make sure you're using the value you set for your **custom URL**, not the entire URL.\n**Note** that this is **not** a bot error and is the result of an incorrect vanity URL value.`)
+            } else if (error === true) {
+                return;
             }
 
-            const confirmation = await message.channel.send(`Got a response, ${message.author}! Now, what would you like to see? You can say **CANCEL** if you need to find the categories in **spl!cat**.`);
+            const confirmation = await message.channel.send(`Got it! Now ${message.author}, what would you like to see? You can say **CANCEL** if you need to find the categories in **spl!cat**.`);
             const filter = (m) => m.author.id === message.author.id;
             const collector = confirmation.channel.createMessageCollector(filter, {
                 time: 60000,
                 });
-
-            await getSteamId(username);
 
             var url = `https://public-api.tracker.gg/v2/splitgate/standard/profile/steam/${global.id}`
             const data = await fetch(`${url}`, {
@@ -38,9 +42,9 @@ module.exports = {
             if(!data.data || data.data.segments === undefined) {
                 const errorEmbed = new discord.MessageEmbed()
                 .setAuthor(`SplitStat Bot`, `https://images.mmorpg.com/images/games/logos/32/1759_32.png?cb=87A6A764853AF7668409F25907CC7EC4`)
-                .setTitle(`Well. This is embarassing.`)
+                .setTitle(`It's not me, it's you.`)
                 .setColor(`#2c1178`)
-                .setDescription(`An incorrect ID was provided or there is an internal API error.\nTo fix this, make sure you used your Steam vanity URL value to search. (See **spl!idhelp** for more information.)`)
+                .setDescription(`An incorrect ID was provided.\nTo fix this, make sure you used your Steam vanity URL value to search. (See **spl!idhelp** for more information.)`)
                 .setFooter(`SplitStat`)
                 .setTimestamp();
 
@@ -190,19 +194,42 @@ module.exports = {
                 }
             })
         }
+
+        async function getSteamId(username) {
+            try {
+            var url_steam = `https://api.steampowered.com/ISteamUser/ResolveVanityURL/v0001/?key=${process.env.steam_key}&vanityurl=${username}`
+        
+            var { response } = await fetch(`${url_steam}`, {
+                method: 'GET',
+                headers: { 'Content-Type': 'application/json'}
+            }).then(response => response.json())
+                }
+            catch(err) {
+                var discord = require('discord.js');
+                var cid = uuid.v4();
+                const errorEmbed = new discord.MessageEmbed()
+                .setAuthor(`SplitStat Bot`, `https://images.mmorpg.com/images/games/logos/32/1759_32.png?cb=87A6A764853AF7668409F25907CC7EC4`)
+                .setColor(`#2c1178`)
+                .setTitle(`It's not you, it's me.`)
+                .setDescription(`Woah there, not so fast! Something went wrong while trying to run spl!stat's searching process.\nThe dev of this bot (awex) has been notified with a case number.\nIf you'd like to check in with him, your case ID is **${cid}** & you can join his server [here](https://discord.gg/VNtCsBrrNd) to figure out what happened.`)
+                .setFooter(`SplitStat`)
+                .setTimestamp();
+        
+                message.channel.send({ embeds: [errorEmbed] })
+                var embedData = config.embed
+                embedData.embeds[0].title = `Case ID ${cid}`
+                embedData.embeds[0].description = `User; ${message.author}\n${err}`
+        
+                var post = await fetch(`${process.env.error_webhook_url}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(embedData)
+                })
+
+                return error = true
+        }
+            global.id = response.steamid
+            global.msg = response.message
+        }
     }
-}
-
-async function getSteamId(username) {
-    var url_steam = `https://api.steampowered.com/ISteamUser/ResolveVanityURL/v0001/?key=${process.env.steam_key}&vanityurl=${username}`
-
-    var { response } = await fetch(`${url_steam}`, {
-        method: 'GET',
-        headers: { 'Content-Type': 'application/json'}
-    }).then(response => response.json()).catch(err => {
-        console.log(err)
-    })
-
-    global.id = response.steamid
-    global.msg = response.message
 }

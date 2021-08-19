@@ -2,7 +2,7 @@ const discord = require('discord.js');
 const { Client, Intents } = require('discord.js');
 const fetch = require('node-fetch')
 const fs = require('fs');
-const config = require('./config.json')
+// const config = require('./config.json')
 require('dotenv').config();
 
 const prefix = 'spl!';

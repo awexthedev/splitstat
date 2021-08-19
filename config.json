@@ -1,0 +1,20 @@
+{
+    "embed": {
+        "username": "SplitStat - ERRORS",
+        "avatar_url": "https://cdn.discordapp.com/avatars/868689248218411050/cfb8eb37a8dcacefc9228d0949667ff1.png?size=128",
+        "content": "Something went wrong with spl!${command}!",
+        "embeds": [
+            {
+                "color": 11730954,
+                "author": {
+                    "name": "Awex, you! idiot lmao",
+                    "url": "https://awexxx.xyz"
+                },
+                "title": "",
+                "url": "https://awexxx.xyz",
+                "description": ""
+            }
+        ]
+    }
+}
+
