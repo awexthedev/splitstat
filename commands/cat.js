@@ -1,7 +1,7 @@
 module.exports = {
     name: 'cat',
-    execute(client, discord, message, args) {
-        const catEmbed = new discord.MessageEmbed()
+    execute(client, message, MessageEmbed) {
+        const catEmbed = new MessageEmbed()
         .setAuthor(`SplitStat Bot`, `https://images.mmorpg.com/images/games/logos/32/1759_32.png?cb=87A6A764853AF7668409F25907CC7EC4`)
         .setColor(`#2c1178`)
         .setTitle(`Stats Categories`)

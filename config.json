@@ -1,4 +1,7 @@
 {
+    "botuser": {
+      "prefix": "spl!"  
+    },
     "embed": {
         "username": "SplitStat - ERRORS",
         "avatar_url": "https://cdn.discordapp.com/avatars/868689248218411050/cfb8eb37a8dcacefc9228d0949667ff1.png?size=128",
@@ -12,6 +15,48 @@
                 },
                 "title": "",
                 "url": "https://awexxx.xyz",
+                "description": ""
+            }
+        ]
+    },
+    "startembed": {
+        "username": "SplitStat - Starting",
+        "avatar_url": "https://cdn.discordapp.com/avatars/868689248218411050/cfb8eb37a8dcacefc9228d0949667ff1.png?size=128",
+        "embeds": [
+            {
+                "author": {
+                    "name": "Awex, you! idiot lmao",
+                    "url": "https://awexxx.xyz"
+                },
+                "title": "SplitStat Starting Up!",
+                "description": ""
+            }
+        ]
+    },
+    "stopembed": {
+        "username": "SplitStat - Ending",
+        "avatar_url": "https://cdn.discordapp.com/avatars/868689248218411050/cfb8eb37a8dcacefc9228d0949667ff1.png?size=128",
+        "embeds": [
+            {
+                "author": {
+                    "name": "Awex, you! idiot lmao",
+                    "url": "https://awexxx.xyz"
+                },
+                "title": "SplitStat Starting Up!",
+                "description": ""
+            }
+        ]
+    },
+    "complainembed": {
+        "username": "SplitStat - Complaint",
+        "avatar_url": "https://cdn.discordapp.com/avatars/868689248218411050/cfb8eb37a8dcacefc9228d0949667ff1.png?size=128",
+        "embeds": [
+            {
+                "author": {
+                    "name": "lmao :middle_finger:",
+                    "icon_url": ""
+                },
+                "title": "",
                 "description": ""
             }
         ]
