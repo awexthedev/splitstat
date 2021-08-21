@@ -49,7 +49,10 @@ module.exports = {
             })
         })
 
+        // console.log(data)
+
         trn = data.data.platformInfo;
+        trnu = data.data.userInfo;
 
         try {
 
@@ -57,14 +60,19 @@ module.exports = {
         .setAuthor(`SplitStat Bot`, `https://images.mmorpg.com/images/games/logos/32/1759_32.png?cb=87A6A764853AF7668409F25907CC7EC4`)
         .setColor(`#2c1178`)
         .setTitle(`${trn.platformUserHandle} -- Steam`)
+        .setURL(`https://steamcommunity.com/profiles/${trn.platformUserId}`)
         .addFields(
             { name: 'Steam64ID', value: `${trn.platformUserId}`, inline: true },
-            { name: `Platform Slug`, value: `${trn.platformSlug}` }
+            { name: `Country Code`, value: `${trnu.countryCode}`, inline: true },
+            { name: `\u200B`, value: `\u200B`, inline: true },
+            { name: `Partner?`, value: `${trnu.isPartner}`, inline: true },
+            { name: `Verified?`, value: `${trnu.isVerified}`, inline: true },
+            { name: `Influencer?`, value: `${trnu.isInfluencer}`, inline: true }
         )
         .setThumbnail(`${trn.avatarUrl}`)
         .setFooter(`SplitStat`)
         .setTimestamp();
-    
+
         return message.reply({ embeds: [profileEmbed] })
         }
         catch(err) {
