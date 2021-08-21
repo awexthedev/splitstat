@@ -35,6 +35,14 @@ for(const file of commands) {
     bot.commands.set(command.name, command)
 }
 
+bot.administration = new Collection();
+const administration = fs.readdirSync('./commands/admin/').filter(file => file.endsWith('.js'));
+for(const file of administration) {
+    const command = require(`./commands/admin/${file}`);
+
+    bot.administration.set(command.name, command);
+}
+
 bot.once('ready', async () => {
     console.log(`SplitStat (PRODUCTION) has logged in!\nLogged in as ${bot.user.tag}.`)
     bot.user.setActivity(`spl!help`)
@@ -69,7 +77,7 @@ bot.on('messageCreate', async message => {
     } else if (command === 'help') {
         bot.commands.get('help').execute(bot, message, MessageEmbed);
     } else if (command === 'profile') {
-        bot.commands.get('profile').execute(bot, message, args, MessageEmbed);
+        bot.commands.get('profile').execute(bot, message, args, MessageEmbed, Tags);
     } else if (command === 'complain') {
         bot.commands.get('complain').execute(bot, message, args, MessageEmbed);
     } else if (command === 'changelog') {
@@ -80,6 +88,10 @@ bot.on('messageCreate', async message => {
         bot.commands.get('link').execute(message, args, MessageEmbed, Tags, Sequelize);
     } else if (command === 'unlink') {
         bot.commands.get('unlink').execute(message, args, MessageEmbed, Tags, Sequelize);
+    } else if (command === 'forceunlink' && message.author.id === `288101780074528768`) {
+        bot.administration.get('forceunlink').execute(message, args, Tags)
+    } else if (command === 'whois' && message.author.id === `288101780074528768`) {
+        bot.administration.get('whois').execute(bot, message, args, MessageEmbed, Tags);
     }
 })
 
