@@ -7,7 +7,7 @@ var { embed } = require('../config.json');
 
 module.exports = {
     name: 'link',
-    async execute(message, args, MessageEmbed, Tags, Sequelize) {
+    async execute(message, args, MessageEmbed) {
 
         if (!args.length) {
             const missingArgs = new MessageEmbed()
@@ -34,7 +34,27 @@ module.exports = {
                 collector.on('collect', async (msg) => {
                     if(msg.content.toLowerCase().startsWith(`yes`)) {
                         collector.stop();
-                        await storeInfo();
+                        let splitLink = await fetch(`http://localhost:3000/link`, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ "steamId": Global.steamid, "vanity": Global.vanityUser, "discordId": message.author.id })
+                        }).then(response => response.json())
+
+                        if (splitLink.message === `Something went wrong while I tried to link that account.`) {
+                            message.reply(`Sorry, something went wrong when trying to link you to ${Global.vanityUser}! Your issue has been posted to Awex and your case ID is **${splitLink.caseid}**.`)
+                            embed.embeds[0].title = `Case ID ${splitLink.caseid}`
+                            embed.embeds[0].description = `User; ${message.author}\nLinking-related (APIError)`
+                            fetch(`${process.env.error_webhook_url}`, {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify(embed)
+                            })
+                        } else if (splitLink.message === `User already exists in database`) {
+                            message.reply(`**That user already exists in my database!** If your account was possibly linked to another user, please contact Awex to force-unlink them.`)
+                        } else {
+                            return message.reply(`I added you to the database! Thanks for linking! You can unlink at any time by running **spl!unlink**!`);
+                        }
+
                     } else if (msg.content.toLowerCase().startsWith(`no`)) {
                         collector.stop()
                         return msg.reply(`Got it! Let me know if you want to try again soon!`)
@@ -74,43 +94,6 @@ module.exports = {
 
             Global.msg = response.message;
             Global.steamid = response.steamid;
-        }
-
-        async function storeInfo() {
-            var steamId = Global.steamid;
-
-            // const tagName = interaction.options.getString('name');
-            // const tagDescription = interaction.options.getString('description');
-
-            try {
-                // equivalent to: INSERT INTO tags (name, description, username) values (?, ?, ?);
-                const tag = await Tags.create({
-                    sid: steamId,
-                    username: message.author.id,
-                    vanity: Global.vanityUser
-                });
-                return message.reply(`I added you to the database! Thanks for linking! You can unlink at any time by running **spl!unlink**!`);
-            }
-            catch (error) {
-                var uuid = require('uuid');
-                var cid = uuid.v4();
-                // console.log(error)
-                if (error.name === 'SequelizeUniqueConstraintError') {
-                    return message.reply('**That user already exists in my database!** If your account was possibly linked to another user, please contact Awex to force-unlink them.');
-                }
-                message.reply('**Something went wrong with adding you!** This has been sent to Awex with a summary of what happened.');
-
-                embed.embeds[0].title = `Case ID ${cid}`
-                embed.embeds[0].description = `User; ${message.author}\n${error}`
-
-                fetch(`${process.env.error_webhook_url}`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(embed)
-                })
-
-
-            }
         }
     }
 }

@@ -25,7 +25,7 @@ module.exports = {
             .setAuthor(`SplitStat Bot`, `https://images.mmorpg.com/images/games/logos/32/1759_32.png?cb=87A6A764853AF7668409F25907CC7EC4`)
             .setColor(`#2c1178`)
             .setTitle(`It's not you, it's me.`)
-            .setDescription(`**Woah there!**\nI ran into an issue submitting your complaint. If you still want to try to submit it, please join Awex's server [here](https://discord.gg/mpVmytjvyn).\n\nI've also forwarded this to him. Your case ID is **${cid}**.`)
+            .setDescription(`**Woah there!**\nI ran into an issue submitting your complaint (ironic, isn't it). If you still want to try to submit it, please join Awex's server [here](https://discord.gg/mpVmytjvyn).\n\nI've also forwarded this to him. Your case ID is **${cid}**.`)
             .setFooter(`SplitStat`)
             .setTimestamp();
     
