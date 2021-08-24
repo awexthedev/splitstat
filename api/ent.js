@@ -61,23 +61,27 @@ app.get('/search', async (req, res) => {
 
         const tag = await Tags.findOne({ where: { username: user } });
     
-        if(myCache.has('uniqueKey')){
-           console.log(`Found TRN data for ${user} in cache, displaying`)
-           res.status(200).send({ "status": 200, "user": { "vanity": tag.get('vanity'), "discordid": tag.get('username'), "steamid": tag.get('sid') }, "trn": myCache.get('uniqueKey') })
-   
-      } else {
-       if (tag) {
-       var trnurl = `https://public-api.tracker.gg/v2/splitgate/standard/profile/steam/${tag.get('sid')}`
-       const data = await fetch(`${trnurl}`, {
-           method: 'GET',
-           headers: { 'TRN-Api-Key': `${process.env.api_key}` }
-       }).then(response => response.json());
-       myCache.set('uniqueKey', data)
-           return res.status(200).send({ "status": 200, "user": { "vanity": tag.get('vanity'), "discordid": tag.get('username'), "steamid": tag.get('sid') }, "trn": data })
-       } else {
-           return res.status(404).send({ "status": 404, "message": "User not found" })
-           }
+        try {
+            if (myCache.has('uniqueKey')) {
+                console.log(`Found TRN data for ${user} in cache, displaying`)
+                res.status(200).send({ "status": 200, "user": { "vanity": tag.get('vanity'), "discordid": tag.get('username'), "steamid": tag.get('sid') }, "trn": myCache.get('uniqueKey') })  
+            } else {
+                if (tag) {
+                    var trnurl = `https://public-api.tracker.gg/v2/splitgate/standard/profile/steam/${tag.get('sid')}`
+                    const data = await fetch(`${trnurl}`, {
+                        method: 'GET',
+                        headers: { 'TRN-Api-Key': `${process.env.api_key}` }
+                    }).then(response => response.json());
+                    myCache.set('uniqueKey', data);
+                        return res.status(200).send({ "status": 200, "user": { "vanity": tag.get('vanity'), "discordid": tag.get('username'), "steamid": tag.get('sid') }, "trn": data })
+            } else {
+                return res.status(404).send({ "status": 404, "message": "User not found" })  
+            }
+        }
     }
+    catch(err) {
+        return res.status(500).send({ "status": 500, "message": "Failed to fetch user, unknown error occurred."})
+        }
     }
 })
 

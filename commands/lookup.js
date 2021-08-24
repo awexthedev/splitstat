@@ -1,159 +1,166 @@
 var fetch = require('node-fetch');
+var uuid = require('uuid');
+var func = require('./functions/fetching.js');
 
-var global = {}
 module.exports = {
     name: 'lookup',
     async execute(message, args, MessageEmbed) {
-        var userData = await fetch(`http://localhost:3000/search?user=${message.author.id}`).then(response => response.json());
-        console.log(userData.status)
+        await func.fetchUser(message.author.id);
+        let userData = func.userData
 
         if(userData.status === 200) {
-
-            const confirmation = await message.channel.send(`Got it! Now ${message.author}, what would you like to see? You can say **CANCEL** if you need to find the categories in **spl!cat**.`);
+            try {
+            const confirm = await message.reply(`Got it! Now ${message.author}, what would you like to see? You can say **CANCEL** if you need to find the categories in **spl!cat**.`)
             const filter = (m) => m.author.id === message.author.id;
-            const collector = confirmation.channel.createMessageCollector(filter, {
-                time: 60000,
-                });
+            const collector = confirm.channel.createMessageCollector(filter, {
+                time: 60000
+            });
 
-                collector.on('collect', async (msg) => {
-                    if(msg.content.toLowerCase().startsWith(`portal`)) {
-                        const portalEmbed = new MessageEmbed()
-                        .setAuthor(`SplitStat Bot`, `https://images.mmorpg.com/images/games/logos/32/1759_32.png?cb=87A6A764853AF7668409F25907CC7EC4`)
-                        .setTitle(`Portal Information`)
-                        .setColor(`#2c1178`)
-                        .setDescription(`All about portals. Kills through them, how many you've spawned etc.`)
-                        .addFields(
-                            { name: 'Portal Kills', value: `${userData.trn.data.segments[0].stats.portalKills.value}`},
-                            { name: 'Kills Through Portal', value: `${userData.trn.data.segments[0].stats.killsThruPortal.value}` },
-                            { name: 'Portals Spawned', value: `${userData.trn.data.segments[0].stats.portalsSpawned.value}` },
-                            { name: 'Own Portals Entered', value: `${userData.trn.data.segments[0].stats.ownPortalsEntered.value}` },
-                            { name: 'Enemy Portals Entered', value: `${userData.trn.data.segments[0].stats.enemyPortalsEntered.value}` },
-                            { name: 'Enemy Portals Destroyed', value: `${userData.trn.data.segments[0].stats.enemyPortalsDestroyed.value}` },
-                            { name: 'Distance Portaled', value: `${userData.trn.data.segments[0].stats.distancePortaled.value}` },
-                            { name: 'Ally Portals Entered', value: `${userData.trn.data.segments[0].stats.allyPortalsEntered.value}` }
-                        )
-                        .setFooter(`SplitStat`)
-                        .setTimestamp();
-    
-                        collector.stop();
-                        message.reply({ embeds: [portalEmbed] })
-                    } else if (msg.content.toLowerCase().startsWith(`kills`)) {
-                        const killEmbed = new MessageEmbed()
-                        .setAuthor(`SplitStat Bot`, `https://images.mmorpg.com/images/games/logos/32/1759_32.png?cb=87A6A764853AF7668409F25907CC7EC4`)
-                        .setColor(`#2c1178`)
-                        .setTitle('Kills Information')
-                        .addFields(
-                            { name: `Kills on Hill`, value: `${userData.trn.data.segments[0].stats.enemyKillsOnHill.value}`, inline: true},
-                            { name: `First Bloods`, value: `${userData.trn.data.segments[0].stats.firstBloods.value}`, inline: true },
-                            { name: 'Flag Carrier Kills', value: `${userData.trn.data.segments[0].stats.flagCarrierKills.value}`, inline: true },
-                            { name: 'Flag Kills', value: `${userData.trn.data.segments[0].stats.flagKills.value}`, inline: true },
-                            { name: 'Highest Consecutive Kills', value: `${userData.trn.data.segments[0].stats.highestConsecutiveKills.value}`, inline: true },
-                            { name: 'Kills as VIP', value: `${userData.trn.data.segments[0].stats.killsAsVIP.value}`, inline: true },
-                            { name: 'Kills on Hill', value: `${userData.trn.data.segments[0].stats.killsOnHill.value}`, inline: true },
-                            { name: 'Oddball Kills', value: `${userData.trn.data.segments[0].stats.oddballKills.value}`, inline: true },
-                            { name: 'Revenge Kills', value: `${userData.trn.data.segments[0].stats.revengeKills.value}`, inline: true },
-                            { name: 'Kills Per Match', value: `${userData.trn.data.segments[0].stats.killsPerMatch.value}`, inline: true }, 
-                            { name: 'Kills Per Minute', value: `${userData.trn.data.segments[0].stats.killsPerMinute.value}`, inline: true },
-                            { name: 'Headshot Kills', value: `${userData.trn.data.segments[0].stats.headshotKills.value}`, inline: true },
-                            { name: 'Collaterals', value: `${userData.trn.data.segments[0].stats.collaterals.value}`, inline: true },
-                            { name: 'Melee Kills', value: `${userData.trn.data.segments[0].stats.meleeKills.value}`, inline: true },
-                            { name: 'Assists', value: `${userData.trn.data.segments[0].stats.assists.value}`, inline: true },
-                            { name: 'Total Kills', value: `${userData.trn.data.segments[0].stats.kills.value}`, inline: true }
-                        )
-                        .setFooter(`SplitStat`)
-                        .setTimestamp();
-    
-                        collector.stop();
-                        return message.channel.send({ embeds: [killEmbed] })
-                    } else if (msg.content.toLowerCase().startsWith(`player`)) {
-                        const playerEmbed = new MessageEmbed()
+            collector.on('collect', async (msg) => {
+                if(msg.content.toLowerCase().startsWith(`portal`)) {
+                    const portalEmbed = new MessageEmbed()
                     .setAuthor(`SplitStat Bot`, `https://images.mmorpg.com/images/games/logos/32/1759_32.png?cb=87A6A764853AF7668409F25907CC7EC4`)
+                    .setTitle(`Portal Information`)
                     .setColor(`#2c1178`)
-                    .setTitle(`Player Information`)
+                    .setDescription(`All about portals. Kills through them, how many you've spawned etc.`)
                     .addFields(
-                        { name: 'KD', value: `${userData.trn.data.segments[0].stats.kd.value}`, inline: true },
-                        { name: 'KAD', value: `${userData.trn.data.segments[0].stats.kad.value}`, inline: true },
-                        { name: 'Points', value: `${userData.trn.data.segments[0].stats.points.value}`, inline: true },
-                        { name: 'Deaths', value: `${userData.trn.data.segments[0].stats.deaths.value}`, inline: true },
-                        { name: 'Suicides', value: `${userData.trn.data.segments[0].stats.suicides.value}`, inline: true },
-                        { name: 'Teabags', value: `${userData.trn.data.segments[0].stats.teabags.value}`, inline: true },
-                        { name: 'Damage Dealt', value: `${userData.trn.data.segments[0].stats.damageDealt.value}`, inline: true },
-                        { name: 'Matches Played', value: `${userData.trn.data.segments[0].stats.matchesPlayed.value}`, inline: true },
-                        { name: 'Wins', value: `${userData.trn.data.segments[0].stats.wins.value}`, inline: true },
-                        { name: 'Losses', value: `${userData.trn.data.segments[0].stats.losses.value}`, inline: true },
-                        { name: 'Time Played', value: `${userData.trn.data.segments[0].stats.timePlayed.value}`, inline: true },
-                        { name: 'Progression XP', value: `${userData.trn.data.segments[0].stats.progressionXp.value}`, inline: true },
-                        { name: 'Progression Level', value: `${userData.trn.data.segments[0].stats.progressionLevel.value}`, inline: true },
-                        { name: 'Rank XP', value: `${userData.trn.data.segments[0].stats.rankXp.value}`, inline: true },
-                        { name: 'Rank Level', value: `${userData.trn.data.segments[0].stats.rankLevel.value}`, inline: true },
-                        { name: 'Shots Fired', value: `${userData.trn.data.segments[0].stats.shotsFired.value}`, inline: true },
-                        { name: 'Shots Landed', value: `${userData.trn.data.segments[0].stats.shotsLanded.value}`, inline: true }
+                        { name: 'Portal Kills', value: `${userData.trn.data.segments[0].stats.portalKills.value}`},
+                        { name: 'Kills Through Portal', value: `${userData.trn.data.segments[0].stats.killsThruPortal.value}` },
+                        { name: 'Portals Spawned', value: `${userData.trn.data.segments[0].stats.portalsSpawned.value}` },
+                        { name: 'Own Portals Entered', value: `${userData.trn.data.segments[0].stats.ownPortalsEntered.value}` },
+                        { name: 'Enemy Portals Entered', value: `${userData.trn.data.segments[0].stats.enemyPortalsEntered.value}` },
+                        { name: 'Enemy Portals Destroyed', value: `${userData.trn.data.segments[0].stats.enemyPortalsDestroyed.value}` },
+                        { name: 'Distance Portaled', value: `${userData.trn.data.segments[0].stats.distancePortaled.value}` },
+                        { name: 'Ally Portals Entered', value: `${userData.trn.data.segments[0].stats.allyPortalsEntered.value}` }
                     )
                     .setFooter(`SplitStat`)
                     .setTimestamp();
 
                     collector.stop();
-                    return message.reply({ embeds: [playerEmbed] })
-                    } else if (msg.content.toLowerCase().startsWith(`streaks`)) {
-                        const streakEmbed = new MessageEmbed()
-                        .setAuthor(`SplitStat Bot`, `https://images.mmorpg.com/images/games/logos/32/1759_32.png?cb=87A6A764853AF7668409F25907CC7EC4`)
-                        .setColor(`#2c1178`)
-                        .setTitle(`Streak Information`)
-                        .addFields(
-                            { name: 'King Slayers', value: `${userData.trn.data.segments[0].stats.kingSlayers.value}`, inline: true },
-                            { name: '50 Kills', value: `${userData.trn.data.segments[0].stats.medalKillstreak6.value}`, inline: true },
-                            { name: '25 Kills', value: `${userData.trn.data.segments[0].stats.medalKillstreak5.value}`, inline: true },
-                            { name: '20 Kills', value: `${userData.trn.data.segments[0].stats.medalKillstreak4.value}`, inline: true },
-                            { name: '15 Kills', value: `${userData.trn.data.segments[0].stats.medalKillstreak3.value}`, inline: true },
-                            { name: '10 Kills', value: `${userData.trn.data.segments[0].stats.medalKillstreak2.value}`, inline: true },
-                            { name: '5 kills', value: `${userData.trn.data.segments[0].stats.medalKillstreak1.value}`, inline: true }
-                        )
-                        .setFooter(`SplitStat`)
-                        .setTimestamp();
-    
-                        collector.stop();
-                        return message.reply({ embeds: [streakEmbed] })
-                    } else if (msg.content.toLowerCase().startsWith(`special`)) {
-                        const specialEmbed = new MessageEmbed()
-                        .setAuthor(`SplitStat Bot`, `https://images.mmorpg.com/images/games/logos/32/1759_32.png?cb=87A6A764853AF7668409F25907CC7EC4`)
-                        .setColor(`#2c1178`)
-                        .setTitle(`Special Information`)
-                        .addFields(
-                            { name: 'Flags Picked Up', value: `${userData.trn.data.segments[0].stats.flagsPickedUp.value}`, inline: true },
-                            { name: 'Flags Returned', value: `${userData.trn.data.segments[0].stats.flagsReturned.value}`, inline: true },
-                            { name: 'Hills Captured', value: `${userData.trn.data.segments[0].stats.hillsCaptured.value}`, inline: true },
-                            { name: 'Hills Neutralized', value: `${userData.trn.data.segments[0].stats.hillsNeutralized.value}`, inline: true },
-                            { name: 'Oddballs Picked Up', value: `${userData.trn.data.segments[0].stats.oddballsPickedUp.value}`, inline: true },
-                            { name: 'Teabags Denied', value: `${userData.trn.data.segments[0].stats.teabagsDenied.value}`, inline: true }
-                        )
-                        .setFooter(`SplitStat`)
-                        .setTimestamp();
-    
-                        collector.stop();
-                        return message.reply({ embeds: [specialEmbed] })
-                    } else if (msg.content.toLowerCase().startsWith(`accuracy`)) {
-                        const accuracyEmbed = new MessageEmbed()
-                        .setAuthor(`SplitStat Bot`, `https://images.mmorpg.com/images/games/logos/32/1759_32.png?cb=87A6A764853AF7668409F25907CC7EC4`)
-                        .setColor(`#2c1178`)
-                        .setTitle(`Accuracy Information`)
-                        .addFields(
-                            { name: 'Headshots Landed', value: `${userData.trn.data.segments[0].stats.headshotsLanded.value}`, inline: true },
-                            { name: 'Shots Accuracy', value: `${userData.trn.data.segments[0].stats.shotsAccuracy.value}`, inline: true },
-                            { name: 'Shots Landed', value: `${userData.trn.data.segments[0].stats.shotsLanded.value}`, inline: true },
-                            { name: 'Headhot Accuracy', value: `${userData.trn.data.segments[0].stats.headshotAccuracy.value}`, inline: true }
-                        )
-                        .setFooter(`SplitStat`)
-                        .setTimestamp();
-    
-                        collector.stop();
-                        return message.reply({ embeds: [accuracyEmbed] })
-                    } else if (msg.content.toLowerCase().startsWith(`cancel`)) {
-                        collector.stop();
-                        return msg.reply(`Okay! I'm not listening anymore.`);
-                    } else {
-                        return message.reply(`Sorry, that isn't a category. Please check **spl!cat** to see all the categories.`)
-                        }
-                    })
+                    return msg.reply({ embeds: [portalEmbed] })
+                } else if (msg.content.toLowerCase().startsWith(`kills`)) {
+                    const killEmbed = new MessageEmbed()
+                    .setAuthor(`SplitStat Bot`, `https://images.mmorpg.com/images/games/logos/32/1759_32.png?cb=87A6A764853AF7668409F25907CC7EC4`)
+                    .setColor(`#2c1178`)
+                    .setTitle('Kills Information')
+                    .addFields(
+                        { name: `Kills on Hill`, value: `${userData.trn.data.segments[0].stats.enemyKillsOnHill.value}`, inline: true},
+                        { name: `First Bloods`, value: `${userData.trn.data.segments[0].stats.firstBloods.value}`, inline: true },
+                        { name: 'Flag Carrier Kills', value: `${userData.trn.data.segments[0].stats.flagCarrierKills.value}`, inline: true },
+                        { name: 'Flag Kills', value: `${userData.trn.data.segments[0].stats.flagKills.value}`, inline: true },
+                        { name: 'Highest Consecutive Kills', value: `${userData.trn.data.segments[0].stats.highestConsecutiveKills.value}`, inline: true },
+                        { name: 'Kills as VIP', value: `${userData.trn.data.segments[0].stats.killsAsVIP.value}`, inline: true },
+                        { name: 'Kills on Hill', value: `${userData.trn.data.segments[0].stats.killsOnHill.value}`, inline: true },
+                        { name: 'Oddball Kills', value: `${userData.trn.data.segments[0].stats.oddballKills.value}`, inline: true },
+                        { name: 'Revenge Kills', value: `${userData.trn.data.segments[0].stats.revengeKills.value}`, inline: true },
+                        { name: 'Kills Per Match', value: `${userData.trn.data.segments[0].stats.killsPerMatch.value}`, inline: true }, 
+                        { name: 'Kills Per Minute', value: `${userData.trn.data.segments[0].stats.killsPerMinute.value}`, inline: true },
+                        { name: 'Headshot Kills', value: `${userData.trn.data.segments[0].stats.headshotKills.value}`, inline: true },
+                        { name: 'Collaterals', value: `${userData.trn.data.segments[0].stats.collaterals.value}`, inline: true },
+                        { name: 'Melee Kills', value: `${userData.trn.data.segments[0].stats.meleeKills.value}`, inline: true },
+                        { name: 'Assists', value: `${userData.trn.data.segments[0].stats.assists.value}`, inline: true },
+                        { name: 'Total Kills', value: `${userData.trn.data.segments[0].stats.kills.value}`, inline: true }
+                    )
+                    .setFooter(`SplitStat`)
+                    .setTimestamp();
+
+                    collector.stop();
+                    return msg.reply({ embeds: [killEmbed] })
+                } else if (msg.content.toLowerCase().startsWith(`player`)) {
+                    const playerEmbed = new MessageEmbed()
+                .setAuthor(`SplitStat Bot`, `https://images.mmorpg.com/images/games/logos/32/1759_32.png?cb=87A6A764853AF7668409F25907CC7EC4`)
+                .setColor(`#2c1178`)
+                .setTitle(`Player Information`)
+                .addFields(
+                    { name: 'KD', value: `${userData.trn.data.segments[0].stats.kd.value}`, inline: true },
+                    { name: 'KAD', value: `${userData.trn.data.segments[0].stats.kad.value}`, inline: true },
+                    { name: 'Points', value: `${userData.trn.data.segments[0].stats.points.value}`, inline: true },
+                    { name: 'Deaths', value: `${userData.trn.data.segments[0].stats.deaths.value}`, inline: true },
+                    { name: 'Suicides', value: `${userData.trn.data.segments[0].stats.suicides.value}`, inline: true },
+                    { name: 'Teabags', value: `${userData.trn.data.segments[0].stats.teabags.value}`, inline: true },
+                    { name: 'Damage Dealt', value: `${userData.trn.data.segments[0].stats.damageDealt.value}`, inline: true },
+                    { name: 'Matches Played', value: `${userData.trn.data.segments[0].stats.matchesPlayed.value}`, inline: true },
+                    { name: 'Wins', value: `${userData.trn.data.segments[0].stats.wins.value}`, inline: true },
+                    { name: 'Losses', value: `${userData.trn.data.segments[0].stats.losses.value}`, inline: true },
+                    { name: 'Time Played', value: `${userData.trn.data.segments[0].stats.timePlayed.value}`, inline: true },
+                    { name: 'Progression XP', value: `${userData.trn.data.segments[0].stats.progressionXp.value}`, inline: true },
+                    { name: 'Progression Level', value: `${userData.trn.data.segments[0].stats.progressionLevel.value}`, inline: true },
+                    { name: 'Rank XP', value: `${userData.trn.data.segments[0].stats.rankXp.value}`, inline: true },
+                    { name: 'Rank Level', value: `${userData.trn.data.segments[0].stats.rankLevel.value}`, inline: true },
+                    { name: 'Shots Fired', value: `${userData.trn.data.segments[0].stats.shotsFired.value}`, inline: true },
+                    { name: 'Shots Landed', value: `${userData.trn.data.segments[0].stats.shotsLanded.value}`, inline: true }
+                )
+                .setFooter(`SplitStat`)
+                .setTimestamp();
+
+                collector.stop();
+                return msg.reply({ embeds: [playerEmbed] })
+                } else if (msg.content.toLowerCase().startsWith(`streaks`)) {
+                    const streakEmbed = new MessageEmbed()
+                    .setAuthor(`SplitStat Bot`, `https://images.mmorpg.com/images/games/logos/32/1759_32.png?cb=87A6A764853AF7668409F25907CC7EC4`)
+                    .setColor(`#2c1178`)
+                    .setTitle(`Streak Information`)
+                    .addFields(
+                        { name: 'King Slayers', value: `${userData.trn.data.segments[0].stats.kingSlayers.value}`, inline: true },
+                        { name: '50 Kills', value: `${userData.trn.data.segments[0].stats.medalKillstreak6.value}`, inline: true },
+                        { name: '25 Kills', value: `${userData.trn.data.segments[0].stats.medalKillstreak5.value}`, inline: true },
+                        { name: '20 Kills', value: `${userData.trn.data.segments[0].stats.medalKillstreak4.value}`, inline: true },
+                        { name: '15 Kills', value: `${userData.trn.data.segments[0].stats.medalKillstreak3.value}`, inline: true },
+                        { name: '10 Kills', value: `${userData.trn.data.segments[0].stats.medalKillstreak2.value}`, inline: true },
+                        { name: '5 kills', value: `${userData.trn.data.segments[0].stats.medalKillstreak1.value}`, inline: true }
+                    )
+                    .setFooter(`SplitStat`)
+                    .setTimestamp();
+
+                    collector.stop();
+                    return msg.reply({ embeds: [streakEmbed] })
+                } else if (msg.content.toLowerCase().startsWith(`special`)) {
+                    const specialEmbed = new MessageEmbed()
+                    .setAuthor(`SplitStat Bot`, `https://images.mmorpg.com/images/games/logos/32/1759_32.png?cb=87A6A764853AF7668409F25907CC7EC4`)
+                    .setColor(`#2c1178`)
+                    .setTitle(`Special Information`)
+                    .addFields(
+                        { name: 'Flags Picked Up', value: `${userData.trn.data.segments[0].stats.flagsPickedUp.value}`, inline: true },
+                        { name: 'Flags Returned', value: `${userData.trn.data.segments[0].stats.flagsReturned.value}`, inline: true },
+                        { name: 'Hills Captured', value: `${userData.trn.data.segments[0].stats.hillsCaptured.value}`, inline: true },
+                        { name: 'Hills Neutralized', value: `${userData.trn.data.segments[0].stats.hillsNeutralized.value}`, inline: true },
+                        { name: 'Oddballs Picked Up', value: `${userData.trn.data.segments[0].stats.oddballsPickedUp.value}`, inline: true },
+                        { name: 'Teabags Denied', value: `${userData.trn.data.segments[0].stats.teabagsDenied.value}`, inline: true }
+                    )
+                    .setFooter(`SplitStat`)
+                    .setTimestamp();
+
+                    collector.stop();
+                    return msg.reply({ embeds: [specialEmbed] })
+                } else if (msg.content.toLowerCase().startsWith(`accuracy`)) {
+                    const accuracyEmbed = new MessageEmbed()
+                    .setAuthor(`SplitStat Bot`, `https://images.mmorpg.com/images/games/logos/32/1759_32.png?cb=87A6A764853AF7668409F25907CC7EC4`)
+                    .setColor(`#2c1178`)
+                    .setTitle(`Accuracy Information`)
+                    .addFields(
+                        { name: 'Headshots Landed', value: `${userData.trn.data.segments[0].stats.headshotsLanded.value}`, inline: true },
+                        { name: 'Shots Accuracy', value: `${userData.trn.data.segments[0].stats.shotsAccuracy.value}`, inline: true },
+                        { name: 'Shots Landed', value: `${userData.trn.data.segments[0].stats.shotsLanded.value}`, inline: true },
+                        { name: 'Headhot Accuracy', value: `${userData.trn.data.segments[0].stats.headshotAccuracy.value}`, inline: true }
+                    )
+                    .setFooter(`SplitStat`)
+                    .setTimestamp();
+
+                    collector.stop();
+                    return message.reply({ embeds: [accuracyEmbed] })
+                } else if (msg.content.toLowerCase().startsWith(`cancel`)) {
+                    collector.stop();
+                    return msg.reply(`Okay! I'm not listening anymore.`);
+                } else {
+                    collector.stop();
+                    msg.reply(`Sorry, but that isn't a category. Check **spl!cat** to see all categories and re-run this command when you've got one.`)
+                }
+            })
+        }
+            catch(err) {
+                var cid = uuid.v4()
+                return message.reply(`Sorry, something went wrong while trying to run spl!lookup.\nThis has been forwarded to the dev to look into with a timestamp and error.\nYour case ID for this issue is ${cid}.`)
+            }
         } else if (userData.status === 404) {
             if(!args.length) {
                 const missingArgs = new MessageEmbed()
@@ -340,9 +347,10 @@ module.exports = {
                         return message.channel.send({ embeds: [accuracyEmbed] })
                     } else if (msg.content.toLowerCase().startsWith(`cancel`)) {
                         collector.stop();
-                        return msg.channel.send(`Okay! I'm not listening anymore.`);
+                        return msg.reply(`Okay! I'm not listening anymore.`);
                     } else {
-                        return message.channel.send(`Sorry, that isn't a category. Please check **spl!cat** to see all the categories.`)
+                        collector.stop();
+                        msg.reply(`Sorry, but that isn't a category. Check **spl!cat** to see all categories and re-run this command when you've got one.`)
                     }
                 })
             }
