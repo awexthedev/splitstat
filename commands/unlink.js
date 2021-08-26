@@ -1,21 +1,15 @@
 var fetch = require('node-fetch');
+var delusr = require('../modules/info.js');
+
 module.exports = {
     name: 'unlink',
     async execute(message, args, MessageEmbed) {
+        await delusr.deleteInfo(message.author.id)
 
-        deleteInfo();
-
-        async function deleteInfo() {
-            var ulink = await fetch(`http://localhost:3000/unlink?id=${message.author.id}`, {
-                method: 'DELETE',
-                headers: { 'Content-Type': 'application/json' }
-            }).then(response => response.json());
-
-            if(ulink.message === 'User does not exist') {
-                return message.reply(`**You're not linked!** Can't unlink an account if you're not linked to it.`)
-            }
-
-            return message.reply(`**Successfully unlinked!** Sorry to see you go :(\nIf you have anything you'd like to ask Awex, feel free to use **spl!complain**!`);
+        if(delusr.msg === `User unlinked`) {
+            return message.reply(`**Sorry to see you go :(**\nYour account has been successfully unlinked.`)
+        } else if (delusr.msg === `User does not exist`) {
+            return message.reply(`**You were never linked**! You LIAR!!!\nYour account is not connected to a Steam ID. If you believe this is an error, contact Awex.`);
         }
     }
 }

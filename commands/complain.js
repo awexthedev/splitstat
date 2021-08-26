@@ -1,10 +1,10 @@
 var fetch = require('node-fetch');
 var uuid = require('uuid');
-var { complainembed, embed } = require('../config.json');
+var { complainembed, embed } = require('../configd.json');
 
 module.exports = {
     name: 'complain',
-    async execute(bot, message, args, MessageEmbed) {
+    async execute(message, args, MessageEmbed) {
         const complaint = args.slice(0).join(' ');
 
         try {

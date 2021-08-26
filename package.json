@@ -1,8 +1,25 @@
 {
   "name": "splitstat",
-  "version": "1.0.0",
-  "description": "A Splitgate Stat Bot",
-  "main": "bot.js",
+  "version": "2.0.5",
+  "description": "A Splitgate Stat Bot though Discord!",
+  "main": "dev/bot.js",
+  "scripts": {
+    "dev": "node dev/bot"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/awexxx/splitstat.git"
+  },
+  "keywords": [
+    "splitgate",
+    "stats"
+  ],
+  "author": "Awex",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/awexxx/splitstat/issues"
+  },
+  "homepage": "https://github.com/awexxx/splitstat#readme",
   "dependencies": {
     "body-parser": "^1.19.0",
     "chalk": "^4.1.2",
@@ -14,25 +31,6 @@
     "node-cache": "^5.1.2",
     "node-fetch": "^2.6.1",
     "sequelize": "^6.6.5",
-    "sqlite3": "^5.0.2",
-    "uuid": "^8.3.2"
-  },
-  "scripts": {
-    "start": "node bot"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/awexxx/splitstat.git"
-  },
-  "keywords": [
-    "splitgate",
-    "bot",
-    "discord"
-  ],
-  "author": "Awex",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/awexxx/splitstat/issues"
-  },
-  "homepage": "https://github.com/awexxx/splitstat#readme"
+    "sqlite3": "^5.0.2"
+  }
 }

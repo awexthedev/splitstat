@@ -1,6 +1,6 @@
 module.exports = {
     name: 'help',
-    execute(client, message, MessageEmbed) {
+    execute(message, MessageEmbed) {
         const helpEmbed = new MessageEmbed()
         .setAuthor(`SplitStat Bot`, `https://images.mmorpg.com/images/games/logos/32/1759_32.png?cb=87A6A764853AF7668409F25907CC7EC4`)
         .setTitle(`SplitStat`)
@@ -20,6 +20,6 @@ module.exports = {
         .setFooter(`SplitStat`)
         .setTimestamp();
 
-        message.channel.send({ embeds: [helpEmbed] })
+        message.reply({ embeds: [helpEmbed] })
     }
 }

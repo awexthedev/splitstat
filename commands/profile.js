@@ -1,154 +1,212 @@
 var fetch = require('node-fetch');
+var config = require('../configd.json');
 module.exports = {
     name: 'profile',
     async execute(message, args, MessageEmbed) {
-        var splitstatApi = await fetch(`http://localhost:3000/search?user=${message.author.id}`, {
-            method: 'GET',
-            headers: { 'Content-Type': 'application/json' }
-        }).then(response => response.json());
-        
-        if (splitstatApi.status === 200) {
-            trn = splitstatApi.trn.data.platformInfo;
-            trnu = splitstatApi.trn.data.userInfo;
-        
-                const profileEmbed = new MessageEmbed()
-                .setAuthor(`SplitStat Bot`, `https://images.mmorpg.com/images/games/logos/32/1759_32.png?cb=87A6A764853AF7668409F25907CC7EC4`)
-                .setColor(`#2c1178`)
-                .setTitle(`${trn.platformUserHandle} -- Steam`)
-                .setURL(`https://steamcommunity.com/profiles/${trn.platformUserId}`)
-                .addFields(
-                    { name: 'Steam64ID', value: `${trn.platformUserId}`, inline: true },
-                    { name: `Country Code`, value: `${trnu.countryCode}`, inline: true },
-                    { name: `\u200B`, value: `\u200B`, inline: true },
-                    { name: `Partner?`, value: `${trnu.isPartner}`, inline: true },
-                    { name: `Verified?`, value: `${trnu.isVerified}`, inline: true },
-                    { name: `Influencer?`, value: `${trnu.isInfluencer}`, inline: true }
-                )
-                .setThumbnail(`${trn.avatarUrl}`)
-                .setFooter(`SplitStat`)
-                .setTimestamp();
-        
-                return message.reply({ embeds: [profileEmbed] })
-        } else if (splitstatApi.status === 404) {
-            if(!args.length) {
-                const missingArgs = new MessageEmbed()
-                .setAuthor(`SplitStat Bot`, `https://images.mmorpg.com/images/games/logos/32/1759_32.png?cb=87A6A764853AF7668409F25907CC7EC4`)
-                .setColor(`#2c1178`)
-                .setTitle(`Not so fast!`)
-                .setDescription(`Hey! Slow down, you're not getting anything without a Steam vanity URL value!
-                To learn how to find that, please run **spl!stathelp** and then add into spl!profile (spl!profile [steam-url-value], ex. spl!profile _awexxx)`)
+        const member = message.mentions.users.first();
+
+        if(member) {
+            var splitstatApi = await fetch(`http://localhost:3000/search?user=${member.id}`, {
+                method: 'GET',
+                headers: { 'Content-Type': 'application/json' }
+            }).then(response => response.json());
+
+            if (splitstatApi.status === 200) {
+                trn = splitstatApi.trn.data.platformInfo;
+                trnu = splitstatApi.trn.data.userInfo;
             
-                return message.reply({ embeds: [missingArgs] });
-            } else {
-                const customVanity = args.slice(0).join(' ');
-                await getInfo(customVanity);
-        
-                if(error === 'true') {
-                    return;
-                }
-        
-                var trnurl = `https://public-api.tracker.gg/v2/splitgate/standard/profile/steam/${global.steamid}`
-                const data = await fetch(`${trnurl}`, {
-                    method: 'GET',
-                    headers: { 'TRN-Api-Key': `${process.env.api_key}` }
-                }).then(response => response.json()).catch(err => {
-                    error = true;
-                    var cid = uuid.v4();
-                    const errorEmbed = new MessageEmbed()
+                    const profileEmbed = new MessageEmbed()
                     .setAuthor(`SplitStat Bot`, `https://images.mmorpg.com/images/games/logos/32/1759_32.png?cb=87A6A764853AF7668409F25907CC7EC4`)
                     .setColor(`#2c1178`)
-                    .setTitle(`It's not you, it's me.`)
-                    .setDescription(`Woah there, not so fast! Something went wrong while trying to run spl!profile's fetching process.\nThe dev of this bot (awex) has been notified with a case number.\nIf you'd like to check in with him, your case ID is **${cid}** & you can join his server [here](https://discord.gg/VNtCsBrrNd) to figure out what happened.`)
+                    .setTitle(`${trn.platformUserHandle} -- ${splitstatApi.user.platform}`)
+                    .addFields(
+                        { name: `Country Code`, value: `${trnu.countryCode}`, inline: true },
+                        { name: `\u200B`, value: `\u200B`, inline: true },
+                        { name: `Partner?`, value: `${trnu.isPartner}`, inline: true },
+                        { name: `Verified?`, value: `${trnu.isVerified}`, inline: true },
+                        { name: `Influencer?`, value: `${trnu.isInfluencer}`, inline: true }
+                    )
+                    .setThumbnail(`${trn.avatarUrl}`)
                     .setFooter(`SplitStat`)
                     .setTimestamp();
             
-                    message.channel.send({ embeds: [errorEmbed] })
-                    embed.embeds[0].title = `Case ID ${cid}`
-                    embed.embeds[0].description = `User; ${message.author}\n${err}`
-        
-                    fetch(`${process.env.error_webhook_url}`, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(embed.embeds[0])
-                    })
-                })
-        
-                trn = data.data.platformInfo;
-                trnu = data.data.userInfo;
-        
-                try {
-        
-                const profileEmbed = new MessageEmbed()
+                    return message.reply({ embeds: [profileEmbed] })
+            } else if (splitstatApi.status === 404) {
+                const errorEmbed = new MessageEmbed()
                 .setAuthor(`SplitStat Bot`, `https://images.mmorpg.com/images/games/logos/32/1759_32.png?cb=87A6A764853AF7668409F25907CC7EC4`)
                 .setColor(`#2c1178`)
-                .setTitle(`${trn.platformUserHandle} -- Steam`)
-                .setURL(`https://steamcommunity.com/profiles/${trn.platformUserId}`)
-                .addFields(
-                    { name: 'Steam64ID', value: `${trn.platformUserId}`, inline: true },
-                    { name: `Country Code`, value: `${trnu.countryCode}`, inline: true },
-                    { name: `\u200B`, value: `\u200B`, inline: true },
-                    { name: `Partner?`, value: `${trnu.isPartner}`, inline: true },
-                    { name: `Verified?`, value: `${trnu.isVerified}`, inline: true },
-                    { name: `Influencer?`, value: `${trnu.isInfluencer}`, inline: true }
-                )
-                .setThumbnail(`${trn.avatarUrl}`)
+                .setTitle(`You did an oopsie!`)
+                .setDescription(`${member} hasn't linked their account yet! Oh noes!\nOnce they do, you'll be able to see the info here!`)
                 .setFooter(`SplitStat`)
                 .setTimestamp();
-        
-                return message.reply({ embeds: [profileEmbed] })
-                }
-                catch(err) {
-                            var cid = uuid.v4();
-                            const errorEmbed = new MessageEmbed()
-                            .setAuthor(`SplitStat Bot`, `https://images.mmorpg.com/images/games/logos/32/1759_32.png?cb=87A6A764853AF7668409F25907CC7EC4`)
-                            .setColor(`#2c1178`)
-                            .setTitle(`It's not you, it's me.`)
-                            .setDescription(`Woah there, not so fast! Something went wrong while trying to run spl!profile's searching process.\nThe dev of this bot (awex) has been notified with a case number.\nIf you'd like to check in with him, your case ID is **${cid}** & you can join his server [here](https://discord.gg/VNtCsBrrNd) to figure out what happened.`)
-                            .setFooter(`SplitStat`)
-                            .setTimestamp();
-                    
-                            message.channel.send({ embeds: [errorEmbed] })
-                            embed.embeds[0].title = `Case ID ${cid}`
-                            embed.embeds[0].description = `User; ${message.author}\n**${err}**`
-        
-                            var webHookPost = await fetch(`${process.env.error_webhook_url}`, {
-                                method: 'POST',
-                                headers: { 'Content-Type': 'application/json' },
-                                body: JSON.stringify(embed)
-                            })
-                }
-        
-                async function getInfo(username) {
-                    var url_steam = `https://api.steampowered.com/ISteamUser/ResolveVanityURL/v0001/?key=${process.env.steam_key}&vanityurl=${username}`
-                        var { response } = await fetch(`${url_steam}`, {
-                            method: 'GET',
-                            headers: { 'Content-Type': 'application/json' }
-                        }).then(response => response.json()).catch(err => {
-                            error = true;
-                            var cid = uuid.v4();
-                            const errorEmbed = new MessageEmbed()
-                            .setAuthor(`SplitStat Bot`, `https://images.mmorpg.com/images/games/logos/32/1759_32.png?cb=87A6A764853AF7668409F25907CC7EC4`)
-                            .setColor(`#2c1178`)
-                            .setTitle(`It's not you, it's me.`)
-                            .setDescription(`Woah there, not so fast! Something went wrong while trying to run profile's searching process.\nThe dev of this bot (awex) has been notified with a case number.\nIf you'd like to check in with him, your case ID is **${cid}** & you can join his server [here](https://discord.gg/VNtCsBrrNd) to figure out what happened.`)
-                            .setFooter(`SplitStat`)
-                            .setTimestamp();
-                    
-                            message.channel.send({ embeds: [errorEmbed] })
-                            embed.embeds[0].title = `Case ID ${cid}`
-                            embed.embeds[0].description = `User; ${message.author}\n${err}`
-        
-                            fetch(`${process.env.error_webhook_url}`, {
-                                method: 'POST',
-                                headers: { 'Content-Type': 'application/json' },
-                                body: JSON.stringify(embed)
-                            })
-                            return;
+
+                return message.reply({ embeds: [ errorEmbed ] })
+            }
+        } else {
+            if(!args.length) {
+                var splitstatApi = await fetch(`http://localhost:3000/search?user=${message.author.id}`, {
+                    method: 'GET',
+                    headers: { 'Content-Type': 'application/json' }
+                }).then(response => response.json());
+
+                if(splitstatApi.status === 200) {
+                    trn = splitstatApi.trn.data.platformInfo;
+                    trnu = splitstatApi.trn.data.userInfo;
+                
+                        const profileEmbed = new MessageEmbed()
+                        .setAuthor(`SplitStat Bot`, `https://images.mmorpg.com/images/games/logos/32/1759_32.png?cb=87A6A764853AF7668409F25907CC7EC4`)
+                        .setColor(`#2c1178`)
+                        .setTitle(`${trn.platformUserHandle} -- ${splitstatApi.user.platform}`)
+                        .addFields(
+                            { name: `Country Code`, value: `${trnu.countryCode}`, inline: true },
+                            { name: `\u200B`, value: `\u200B`, inline: true },
+                            { name: `Partner?`, value: `${trnu.isPartner}`, inline: true },
+                            { name: `Verified?`, value: `${trnu.isVerified}`, inline: true },
+                            { name: `Influencer?`, value: `${trnu.isInfluencer}`, inline: true }
+                        )
+                        .setThumbnail(`${trn.avatarUrl}`)
+                        .setFooter(`SplitStat`)
+                        .setTimestamp();
+                
+                        return message.reply({ embeds: [profileEmbed] })
+                } else if (splitstatApi.status === 404) {
+
+                    const confirmation = await message.reply(`Hey there ${message.author}!\nWhat's the platform of the user you're trying to find the profile of? (Xbox, Steam, Playstation)\nIf you need to cancel at anytime, say **cancel**.`);
+                    const filter = (m) => m.author.id === message.author.id;
+                    const collector = confirmation.channel.createMessageCollector(filter, {
+                        time: 60000,
+                        });
+
+                        collector.on('collect', async (msg) => {
+                            if(msg.content.toLowerCase().startsWith(`xbox`)) {
+                                collector.stop();
+                                const confirmation = await msg.reply(`Great! What's their username?`);
+                                const filter = (m) => m.author.id === message.author.id;
+                                const collector1 = confirmation.channel.createMessageCollector(filter, {
+                                    time: 60000,
+                                    });
+
+                                    collector1.on('collect', async (msgid) => {
+                                        collector1.stop();
+                                        try {
+                                        var trnurl = `https://public-api.tracker.gg/v2/splitgate/standard/profile/xbl/${msgid.content}`
+                                        const data = await fetch(`${trnurl}`, {
+                                            method: 'GET',
+                                            headers: { 'TRN-Api-Key': `${config.botuser.trn_api}` }
+                                        }).then(response => response.json());
+
+                                        if(data.errors) {
+                                        if(data.errors[0].code === "CollectorResultStatus::NotFound") {
+                                            return msgid.reply(`Sorry, that user doesn't exist on Splitgate **Xbox**.`)
+                                        }
+                                    }
+
+                                        const profileEmbed = new MessageEmbed()
+                                        .setAuthor(`SplitStat Bot`, `https://images.mmorpg.com/images/games/logos/32/1759_32.png?cb=87A6A764853AF7668409F25907CC7EC4`)
+                                        .setColor(`#2c1178`)
+                                        .setTitle(`${data.data.platformInfo.platformUserHandle} -- ${data.data.platformInfo.platformSlug}`)
+                                        .addFields(
+                                            { name: `Country Code`, value: `${data.data.userInfo.countryCode}`, inline: true },
+                                            { name: `\u200B`, value: `\u200B`, inline: true },
+                                            { name: `Partner?`, value: `${data.data.userInfo.isPartner}`, inline: true },
+                                            { name: `Verified?`, value: `${data.data.userInfo.isVerified}`, inline: true },
+                                            { name: `Influencer?`, value: `${data.data.userInfo.isInfluencer}`, inline: true }
+                                        )
+                                        .setFooter(`SplitStat`)
+                                        .setTimestamp();
+                                
+                                        return message.reply({ embeds: [profileEmbed] })
+
+                                    }
+                                    catch(err) {
+                                        console.log(err)
+                                    }
+                                    })
+                            } else if (msg.content.toLowerCase().startsWith(`steam`)) {
+                                collector.stop();
+                                const confirmation = await msg.reply(`Great! What's their Steam64ID? (check spl!stathelp for more info)`);
+                                const filter = (m) => m.author.id === message.author.id;
+                                const collector1 = confirmation.channel.createMessageCollector(filter, {
+                                    time: 60000,
+                                    });
+
+                                    collector1.on('collect', async (msgid) => {
+                                        collector1.stop();
+                                        var trnurl = `https://public-api.tracker.gg/v2/splitgate/standard/profile/steam/${msgid.content}`
+                                        const data = await fetch(`${trnurl}`, {
+                                            method: 'GET',
+                                            headers: { 'TRN-Api-Key': `${config.botuser.trn_api}` }
+                                        }).then(response => response.json());
+
+                                        if(data.errors) {
+                                            if(data.errors[0].code === "CollectorResultStatus::NotFound") {
+                                                return msgid.reply(`Sorry, that user doesn't exist on Splitgate **Steam**.`)
+                                        }
+                                    }
+
+                                        const steamEmbed = new MessageEmbed()
+                                        .setAuthor(`SplitStat Bot`, `https://images.mmorpg.com/images/games/logos/32/1759_32.png?cb=87A6A764853AF7668409F25907CC7EC4`)
+                                        .setColor(`#2c1178`)
+                                        .setTitle(`${data.data.platformInfo.platformUserHandle} -- ${data.data.platformInfo.platformSlug}`)
+                                        .addFields(
+                                            { name: `Country Code`, value: `${data.data.userInfo.countryCode}`, inline: true },
+                                            { name: `\u200B`, value: `\u200B`, inline: true },
+                                            { name: `Partner?`, value: `${data.data.userInfo.isPartner}`, inline: true },
+                                            { name: `Verified?`, value: `${data.data.userInfo.isVerified}`, inline: true },
+                                            { name: `Influencer?`, value: `${data.data.userInfo.isInfluencer}`, inline: true }
+                                        )
+                                        .setFooter(`SplitStat`)
+                                        .setTimestamp();
+                                
+                                        return message.reply({ embeds: [steamEmbed] })
+
+                                    })
+                                } else if (msg.content.toLowerCase().startsWith(`playstation`)) {
+                                    collector.stop();
+                                    const confirmation = await msg.reply(`Great! What's their PSN ID?`);
+                                    const filter = (m) => m.author.id === message.author.id;
+                                    const collector1 = confirmation.channel.createMessageCollector(filter, {
+                                        time: 60000,
+                                        });
+    
+                                        collector1.on('collect', async (msgid) => {
+                                            collector1.stop();
+                                            var trnurl = `https://public-api.tracker.gg/v2/splitgate/standard/profile/psn/${msgid.content}`
+                                            const data = await fetch(`${trnurl}`, {
+                                                method: 'GET',
+                                                headers: { 'TRN-Api-Key': `${config.botuser.trn_api}` }
+                                            }).then(response => response.json());
+    
+                                            if(data.errors) {
+                                                if(data.errors[0].code === "CollectorResultStatus::NotFound") {
+                                                    return msgid.reply(`Sorry, that user doesn't exist on Splitgate **PlayStation**.`)
+                                            }
+                                        }
+    
+                                            const steamEmbed = new MessageEmbed()
+                                            .setAuthor(`SplitStat Bot`, `https://images.mmorpg.com/images/games/logos/32/1759_32.png?cb=87A6A764853AF7668409F25907CC7EC4`)
+                                            .setColor(`#2c1178`)
+                                            .setTitle(`${data.data.platformInfo.platformUserHandle} -- ${data.data.platformInfo.platformSlug}`)
+                                            .addFields(
+                                                { name: `Country Code`, value: `${data.data.userInfo.countryCode}`, inline: true },
+                                                { name: `\u200B`, value: `\u200B`, inline: true },
+                                                { name: `Partner?`, value: `${data.data.userInfo.isPartner}`, inline: true },
+                                                { name: `Verified?`, value: `${data.data.userInfo.isVerified}`, inline: true },
+                                                { name: `Influencer?`, value: `${data.data.userInfo.isInfluencer}`, inline: true }
+                                            )
+                                            .setFooter(`SplitStat`)
+                                            .setTimestamp();
+                                    
+                                            return message.reply({ embeds: [steamEmbed] })
+    
+                                        })
+                                } else if (msg.content.toLowerCase().startsWith(`cancel`)) {
+                                    collector.stop();
+                                    return message.reply(`Got it! I've stopped listening.`)
+                                }
                         })
-        
-                        global.steamid = response.steamid;
                 }
             }
         }
     }
-}
+} 
