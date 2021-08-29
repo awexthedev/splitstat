@@ -10,7 +10,6 @@ module.exports = {
             { name: `node-fetch (https://npmjs.com/package/node-fetch)`, value: `Handles all web API fetching (both Steam & TRN's APIs)` },
             { name: `uuid (https://npmjs.com/package/uuid)`, value: `Generates case IDs when [*everything* goes wrong](https://www.youtube.com/watch?v=nqVbnFtT_PU)` },
             { name: `dotenv (https://npmjs.com/package/dotenv)`, value: `Hides tokens, webhook URLs etc.` },
-            { name: `sequelize (https://npmjs.com/package/sequelize)`, value: `Handles all database type stuff (storing data, deleting data etc)` },
             { name: `And obviously discord.js (https://npmjs.com/package/discord.js)`, value: `Handles everything related to Discord and its API (which is, like, everything)`}
         )
         .setFooter(`SplitStat`)
