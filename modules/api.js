@@ -41,8 +41,6 @@ async function fetchTrnApi(user, platform, args) {
         headers: { 'Content-Type': 'application/json', 'TRN-Api-Key': `${config.botuser.trn_api}` }
     }).then(response => response.json())
 
-    console.log(data)
-
     if(data.errors) {
         if(data.errors[0].code === "CollectorResultStatus::NotFound") {
             error = true

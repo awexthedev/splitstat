@@ -54,10 +54,6 @@ module.exports = {
                 return message.reply({ embeds: [ missingArgs ] })
             }
 
-            if(!args[3]) {
-
-            }
-
 
             // Beginning of data
             if (category.toLowerCase() === 'kills') {

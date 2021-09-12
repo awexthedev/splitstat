@@ -2,9 +2,9 @@
   "name": "splitstat",
   "version": "2.0.5",
   "description": "A Splitgate Stat Bot though Discord!",
-  "main": "dev/bot.js",
+  "main": "bot.js",
   "scripts": {
-    "dev": "node dev/bot"
+    "dev": "node bot"
   },
   "repository": {
     "type": "git",
