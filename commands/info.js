@@ -1,7 +1,13 @@
+const { SlashCommandBuilder } = require('@discordjs/builders');
+const discord = require('discord.js');
+
 module.exports = {
     name: 'info',
-    execute(message, MessageEmbed) {
-        const infoEmbed = new MessageEmbed()
+    data: new SlashCommandBuilder()
+    .setName(`info`)
+    .setDescription(`Info about this bot!`),
+    async execute(interaction) {
+        const infoEmbed = new discord.MessageEmbed()
         .setAuthor(`SplitStat Bot`, `https://images.mmorpg.com/images/games/logos/32/1759_32.png?cb=87A6A764853AF7668409F25907CC7EC4`)
         .setColor(`#2c1178`)
         .setTitle(`SplitStat Information`)
@@ -15,6 +21,6 @@ module.exports = {
         .setFooter(`SplitStat`)
         .setTimestamp();
 
-        return message.reply({ embeds: [infoEmbed] });
+        return await interaction.reply({ embeds: [infoEmbed] });
     }
 }

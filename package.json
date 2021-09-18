@@ -1,9 +1,10 @@
 {
   "name": "splitstat",
-  "version": "2.0.5",
+  "version": "3.0.0",
   "description": "A Splitgate Stat Bot though Discord!",
   "main": "bot.js",
   "scripts": {
+    "start": "node deploy/deploy-prod.js && node bot",
     "dev": "node bot"
   },
   "repository": {
@@ -21,7 +22,10 @@
   },
   "homepage": "https://github.com/awexxx/splitstat#readme",
   "dependencies": {
+    "@discordjs/builders": "^0.6.0",
+    "@discordjs/rest": "^0.1.0-canary.0",
     "chalk": "^4.1.2",
+    "discord-api-types": "^0.23.1",
     "discord.js": "^13.1.0",
     "dotenv": "^10.0.0",
     "node-fetch": "^2.6.1",

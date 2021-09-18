@@ -1,19 +1,23 @@
+const { SlashCommandBuilder } = require('@discordjs/builders');
+const discord = require('discord.js');
 module.exports = {
     name: 'changelog',
-    execute(message, MessageEmbed) {
-      const changelogEmbed = new MessageEmbed()
+    data: new SlashCommandBuilder()
+    .setName(`changelog`)
+    .setDescription(`See new features added to this bot!`),
+    async execute(interaction) {
+      const changelogEmbed = new discord.MessageEmbed()
       .setAuthor(`SplitStat Bot`, `https://images.mmorpg.com/images/games/logos/32/1759_32.png?cb=87A6A764853AF7668409F25907CC7EC4`)
       .setColor(`#2c1178`)
-      .setTitle(`Latest Changelog - 08/29/2021`)
-      .setDescription(`Even more rewriting, error catching, and more!\nThis update brings SplitStat to **Version 2.4!**`)
+      .setTitle(`Latest Changelog - 09/18/2021`)
+      .setDescription(`Slash commands, sunsetting message commands and more!\nThis update brings SplitStat to **Version 3.0!**`)
       .addFields(
-        { name: 'Removed linking system', value: "In preparation for future features and more brainstorming. PS and XBX made this very complicated lmao" },
-        { name: 'Rewrote lookup backend', value: "This now catches even more errors and should prevent the bot from crashing." },
-        { name: 'Updated profile command', value: "Tied it into the same system as lookup, just querying for different data" }
+        { name: 'Implemented slash command system', value: "SplitStat now has slash command support!" },
+        { name: 'Sunsetting of Message Commands', value: "All message commands have been depricated. They will no longer work." }
       )
       .setFooter(`SplitStat`)
       .setTimestamp();
 
-    return message.reply({ embeds: [changelogEmbed] });
+    return await interaction.reply({ embeds: [changelogEmbed] });
     }
 }

@@ -1,39 +1,43 @@
 const api = require('../modules/api.js');
+const { SlashCommandBuilder } = require('@discordjs/builders');
+const discord = require('discord.js');
 
 module.exports = {
     name: 'lookup',
-    async execute(message, args, MessageEmbed) {
-        if (!args.length) {
-            const missingArgs = new MessageEmbed()
-            .setAuthor(`SplitStat Bot`, `https://images.mmorpg.com/images/games/logos/32/1759_32.png?cb=87A6A764853AF7668409F25907CC7EC4`)
-            .setTitle(`Not so fast!`)
-            .setColor(`#2c1178`)
-            .setDescription(`No arguments to correctly search for that user were provided. Please make sure your usage is correct!`)
-            .setFooter(`SplitStat`)
-            .setTimestamp();
+    data: new SlashCommandBuilder()
+    .setName(`lookup`)
+    .setDescription(`Lookup your user stats!`)
+    .addStringOption(option => 
+        option.setName(`platform`)
+            .setDescription(`Platform you're on.`)
+            .setRequired(true)
+            .addChoice('Xbox', 'xbl')
+            .addChoice('PlayStation', 'psn')
+            .addChoice('Steam', 'steam'))
+    .addStringOption(option => (
+        option.setName(`player`)
+            .setDescription(`Your ID/Gamertag! For Steam, your Steam Profile URL!.`)
+            .setRequired(true)))
+    .addStringOption(option => (
+        option.setName(`category`)
+            .setDescription(`The category of your choice!`)
+            .setRequired(true)
+            .addChoice('Kills', 'kills')
+            .addChoice('Portals', 'portals')
+            .addChoice('Special', 'special')
+            .addChoice('Accuracy', 'accuracy')
+            .addChoice('Streaks', 'streaks')
+            .addChoice('Player', 'player')
+    )),
+    async execute(interaction) {
+            const platform = interaction.options.getString('platform')
+            const player = interaction.options.getString('player')
+            const category = interaction.options.getString('category')
 
-            return message.reply({ embeds: [ missingArgs ] })
-        } else {
-            const platform = args[0]
-            const player = args[1]
-            const category = args[2]
+            await api.fetchTrnApi(player, platform, interaction)
 
-            if (!platform || !player || !category) {
-                const missingArgs = new MessageEmbed()
-                .setAuthor(`SplitStat Bot`, `https://images.mmorpg.com/images/games/logos/32/1759_32.png?cb=87A6A764853AF7668409F25907CC7EC4`)
-                .setTitle(`Not so fast!`)
-                .setColor(`#2c1178`)
-                .setDescription(`Uh oh, something was undefined! Make sure you provided all 3 arguments before continuing.`)
-                .setFooter(`SplitStat`)
-                .setTimestamp();
-    
-                return message.reply({ embeds: [ missingArgs ] })
-            }
-
-            await api.fetchTrnApi(player, platform, args)
-
-            if (api.errmsg === `User yes doesn't exist in Tracker Network's ${platform} API`) {
-                const missingArgs = new MessageEmbed()
+            if (api.errmsg === `User ${player} doesn't exist in Tracker Network's ${platform} API`) {
+                const fourohfour = new discord.MessageEmbed()
                 .setAuthor(`SplitStat Bot`, `https://images.mmorpg.com/images/games/logos/32/1759_32.png?cb=87A6A764853AF7668409F25907CC7EC4`)
                 .setTitle(`Not so fast!`)
                 .setColor(`#2c1178`)
@@ -41,23 +45,32 @@ module.exports = {
                 .setFooter(`SplitStat`)
                 .setTimestamp();
     
-                return message.reply({ embeds: [ missingArgs ] })
-            } else if(api.error === true || !api.trn) {
-                const missingArgs = new MessageEmbed()
+                return await interaction.reply({ embeds: [ fourohfour ] })
+            } else if (api.errmsg === `Need to provide a URL for Steam user!`) {
+                const noUrl = new discord.MessageEmbed()
                 .setAuthor(`SplitStat Bot`, `https://images.mmorpg.com/images/games/logos/32/1759_32.png?cb=87A6A764853AF7668409F25907CC7EC4`)
                 .setTitle(`Not so fast!`)
                 .setColor(`#2c1178`)
-                .setDescription('Uh oh! Something went wrong during the processing phase. This has been reported to Awex and will be fixed soon.\n**Error: `' + api.errmsg + '`**')
+                .setDescription('Uh oh! You used **Steam** as a way to find your stats. I need a URL to your Steam profile, not your username!')
                 .setFooter(`SplitStat`)
                 .setTimestamp();
     
-                return message.reply({ embeds: [ missingArgs ] })
+                return await interaction.reply({ embeds: [ noUrl ] })
+            } else if(api.error === true || !api.trn) {
+                const unhandledError = new discord.MessageEmbed()
+                .setAuthor(`SplitStat Bot`, `https://images.mmorpg.com/images/games/logos/32/1759_32.png?cb=87A6A764853AF7668409F25907CC7EC4`)
+                .setTitle(`Not so fast!`)
+                .setColor(`#2c1178`)
+                .setDescription('Uh oh! Something went wrong during the processing phase that was not handled. This has been reported to Awex and will be fixed soon.\n**Error: `' + api.errmsg + '`**')
+                .setFooter(`SplitStat`)
+                .setTimestamp();
+    
+                return await interaction.reply({ embeds: [ unhandledError ] })
             }
 
-
             // Beginning of data
-            if (category.toLowerCase() === 'kills') {
-                const killEmbed = new MessageEmbed()
+            if (category === 'kills') {
+                const killEmbed = new discord.MessageEmbed()
                 .setAuthor(`SplitStat Bot`, `https://images.mmorpg.com/images/games/logos/32/1759_32.png?cb=87A6A764853AF7668409F25907CC7EC4`)
                 .setColor(`#2c1178`)
                 .setTitle('Kills Information')
@@ -82,9 +95,9 @@ module.exports = {
                 .setFooter(`SplitStat`)
                 .setTimestamp();
 
-                return message.reply({ embeds: [killEmbed] })
-            } else if (category.toLowerCase() === 'accuracy') {
-                const accuracyEmbed = new MessageEmbed()
+                return await interaction.reply({ embeds: [killEmbed] })
+            } else if (category === 'accuracy') {
+                const accuracyEmbed = new discord.MessageEmbed()
                 .setAuthor(`SplitStat Bot`, `https://images.mmorpg.com/images/games/logos/32/1759_32.png?cb=87A6A764853AF7668409F25907CC7EC4`)
                 .setColor(`#2c1178`)
                 .setTitle(`Accuracy Information`)
@@ -97,9 +110,9 @@ module.exports = {
                 .setFooter(`SplitStat`)
                 .setTimestamp();
 
-                return message.reply({ embeds: [accuracyEmbed] })
-            } else if (category.toLowerCase() === 'special') {
-                const specialEmbed = new MessageEmbed()
+                return await interaction.reply({ embeds: [accuracyEmbed] })
+            } else if (category === 'special') {
+                const specialEmbed = new discord.MessageEmbed()
                 .setAuthor(`SplitStat Bot`, `https://images.mmorpg.com/images/games/logos/32/1759_32.png?cb=87A6A764853AF7668409F25907CC7EC4`)
                 .setColor(`#2c1178`)
                 .setTitle(`Special Information`)
@@ -114,9 +127,9 @@ module.exports = {
                 .setFooter(`SplitStat`)
                 .setTimestamp();
 
-                return message.reply({ embeds: [specialEmbed] })
-            } else if (category.toLowerCase() === 'portal') {
-                const portalEmbed = new MessageEmbed()
+                return await interaction.reply({ embeds: [specialEmbed] })
+            } else if (category === 'portals') {
+                const portalEmbed = new discord.MessageEmbed()
                 .setAuthor(`SplitStat Bot`, `https://images.mmorpg.com/images/games/logos/32/1759_32.png?cb=87A6A764853AF7668409F25907CC7EC4`)
                 .setTitle(`Portal Information`)
                 .setColor(`#2c1178`)
@@ -134,9 +147,9 @@ module.exports = {
                 .setFooter(`SplitStat`)
                 .setTimestamp();
 
-                return message.reply({ embeds: [portalEmbed] })
-            } else if (category.toLowerCase() === 'streaks') {
-                const streakEmbed = new MessageEmbed()
+                return await interaction.reply({ embeds: [portalEmbed] })
+            } else if (category === 'streaks') {
+                const streakEmbed = new discord.MessageEmbed()
                 .setAuthor(`SplitStat Bot`, `https://images.mmorpg.com/images/games/logos/32/1759_32.png?cb=87A6A764853AF7668409F25907CC7EC4`)
                 .setColor(`#2c1178`)
                 .setTitle(`Streak Information`)
@@ -152,9 +165,9 @@ module.exports = {
                 .setFooter(`SplitStat`)
                 .setTimestamp();
 
-                return message.reply({ embeds: [streakEmbed] })
-            } else if (category.toLowerCase() === `player`) {
-                const playerEmbed = new MessageEmbed()
+                return await interaction.reply({ embeds: [streakEmbed] })
+            } else if (category === `player`) {
+                const playerEmbed = new discord.MessageEmbed()
                 .setAuthor(`SplitStat Bot`, `https://images.mmorpg.com/images/games/logos/32/1759_32.png?cb=87A6A764853AF7668409F25907CC7EC4`)
                 .setColor(`#2c1178`)
                 .setTitle(`Player Information`)
@@ -180,9 +193,9 @@ module.exports = {
                 .setFooter(`SplitStat`)
                 .setTimestamp();
 
-                return message.reply({ embeds: [ playerEmbed ] });
+                return await interaction.reply({ embeds: [ playerEmbed ] });
             } else {
-                const missingArgs = new MessageEmbed()
+                const missingArgs = new discord.MessageEmbed()
                 .setAuthor(`SplitStat Bot`, `https://images.mmorpg.com/images/games/logos/32/1759_32.png?cb=87A6A764853AF7668409F25907CC7EC4`)
                 .setTitle(`Not so fast!`)
                 .setColor(`#2c1178`)
@@ -198,8 +211,7 @@ module.exports = {
                 .setFooter(`SplitStat`)
                 .setTimestamp();
     
-                return message.reply({ embeds: [ missingArgs ] })
+                return await interaction.reply({ embeds: [ missingArgs ] })
             }
-        }
     }
 }

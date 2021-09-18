@@ -1,7 +1,12 @@
+const { SlashCommandBuilder } = require('@discordjs/builders');
+const discord = require('discord.js');
 module.exports = {
     name: 'cat',
-    execute(message, MessageEmbed) {
-        const catEmbed = new MessageEmbed()
+    data: new SlashCommandBuilder()
+    .setName('cat')
+    .setDescription(`See all the categories you can search!`),
+    async execute(interaction) {
+        const catEmbed = new discord.MessageEmbed()
         .setAuthor(`SplitStat Bot`, `https://images.mmorpg.com/images/games/logos/32/1759_32.png?cb=87A6A764853AF7668409F25907CC7EC4`)
         .setColor(`#2c1178`)
         .setTitle(`Stats Categories`)
@@ -16,6 +21,6 @@ module.exports = {
         .setFooter(`SplitStat`)
         .setTimestamp();
 
-        return message.reply({ embeds: [catEmbed] })
+        return await interaction.reply({ embeds: [catEmbed] })
     }
 }
