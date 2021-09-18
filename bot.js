@@ -17,6 +17,8 @@ client.once('ready', async () => {
     console.log(`-----------`)
     console.log(chalk.greenBright.bold(`Splitstat has started!\nLogged in as ${client.user.tag}.\nCurrently in ${client.guilds.cache.size} guilds.`))
     console.log(`-----------`)
+
+	client.user.setActivity("/help");
 });
 
 client.on('messageCreate', async msg => {
