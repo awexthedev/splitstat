@@ -41,7 +41,7 @@ module.exports = {
                 .setAuthor(`SplitStat Bot`, `https://images.mmorpg.com/images/games/logos/32/1759_32.png?cb=87A6A764853AF7668409F25907CC7EC4`)
                 .setTitle(`Not so fast!`)
                 .setColor(`#2c1178`)
-                .setDescription(`Woah there! **${player}** wasn't found in Tracker Network's API! Are you sure it was the right name?`)
+                .setDescription(`Woah there! **${player}** wasn't found in Tracker Network's ${platform} API! Are you sure it was the right name & platform?`)
                 .setFooter(`SplitStat`)
                 .setTimestamp();
     

@@ -13,8 +13,8 @@ module.exports = {
         .setColor(`#2c1178`)
         .setDescription(`SplitStat is a Discord bot that fetches stats from the [Tracker Network](https://tracker.gg) and returns them to you!\n\nNote that this bot is **not** affiliated with [1047 Games](https://splitgate.com) or [The Tracker Network](https://tracker.gg).`)
         .addFields(
-            { name: 'lookup', value: `The main thing! Look up your Splitgate stats using your Steam Vanity URL Value (to find this, see **spl!stathelp**.)`, inline: true },
-            { name: 'profile', value: `Returns some basic information TRN uses to format your profile (profile picture, Steam64ID etc).`, inline: false },
+            { name: 'lookup', value: `The main thing! Look up your Splitgate stats using your Steam profile link.`, inline: true },
+            { name: 'profile', value: `Returns some basic information TRN uses to format your profile..`, inline: false },
             { name: 'cat', value: `Gives all the categories you can use when spl!lookup prompts you for a category.`, inline: false, },
             { name: 'complain', value: `Allows you to send me a message! Feel free to use this as a suggestion tool or to vent about your frustration regarding this bot!`, inline: true },
             { name: 'changelog', value: 'Shows the latest updates to this bot.', inline: true  },

@@ -13,7 +13,8 @@ module.exports = {
       .setDescription(`Slash commands, sunsetting message commands and more!\nThis update brings SplitStat to **Version 3.0!**`)
       .addFields(
         { name: 'Implemented slash command system', value: "SplitStat now has slash command support!" },
-        { name: 'Sunsetting of Message Commands', value: "All message commands have been depricated. They will no longer work." }
+        { name: 'Sunsetting of Message Commands', value: "All message commands have been depricated. They will no longer work." },
+        { name: 'Fixed 404 when using Steam ID URL', value: 'Fixed an issue where SplitStat would 404 when using a URL without a vanity URL'}
       )
       .setFooter(`SplitStat`)
       .setTimestamp();
