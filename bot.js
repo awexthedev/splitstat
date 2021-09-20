@@ -30,12 +30,6 @@ for (const file of eventFiles) {
 // Webhook Init
 const webhookClient = new Discord.WebhookClient({ id: config.botuser.webhookId, token: config.botuser.webhookToken })
 
-client.on('messageCreate', async msg => {
-    prefix = `spl!`
-    if(!msg.content.startsWith(prefix) || msg.author.bot) return;
-     return msg.reply(`Hey there, ${msg.author}!\nSplitstat has retired message commands completely as of **September 18th, 2021**. You must now use **slash commands**.\nRun **/help** for **Splitstat** to get started!`)
-})
-
 client.on('interactionCreate', async interaction => {
 	if (!interaction.isCommand()) return;
 
@@ -83,6 +77,8 @@ process.on('SIGINT', async () => {
 			avatarURL: 'https://cdn.discordapp.com/app-icons/868689248218411050/cfb8eb37a8dcacefc9228d0949667ff1.png',
 			embeds: [exitEmbed]
 		});
+	} else {
+		console.log(chalk.greenBright.bold(`In DEVELOPMENT mode, not firing webhook.`))
 	}
 
 	process.exit();
@@ -93,7 +89,7 @@ process.on('uncaughtException', async (error) => {
 
 	const uncaughtEmbed = new Discord.MessageEmbed()
 	.setTitle(`SplitStat - Uncaught Exception`)
-	.setDescription(`SplitStat encountered an uncaught exception at **<t:${Math.round(Date.now() / 1000)}:f>**!\n**Error: ${error}**`)
+	.setDescription(`SplitStat encountered an uncaught exception at **<t:${Math.round(Date.now() / 1000)}:f>**!\n**${error}**`)
 
 	webhookClient.send({
 		username: 'SplitStat - Uncaught Exception',
