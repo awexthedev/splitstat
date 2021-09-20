@@ -62,10 +62,11 @@ module.exports = {
             .setTitle(`${api.profile.platformInfo.platformUserHandle} -- ${platform}`)
             .addFields(
                 { name: `Country Code`, value: `${api.profile.userInfo.countryCode}`, inline: true },
-                { name: `\u200B`, value: `\u200B`, inline: true },
+                { name: `User ID`, value: `${api.profile.userInfo.userId}`, inline: true },
                 { name: `Partner?`, value: `${api.profile.userInfo.isPartner}`, inline: true },
                 { name: `Verified?`, value: `${api.profile.userInfo.isVerified}`, inline: true },
-                { name: `Influencer?`, value: `${api.profile.userInfo.isInfluencer}`, inline: true }
+                { name: `Influencer?`, value: `${api.profile.userInfo.isInfluencer}`, inline: true },
+                { name: 'TRN Premium?', value: `${api.profile.userInfo.isPremium}`, inline: true }
             )
             .setFooter(`SplitStat`)
             .setTimestamp();
