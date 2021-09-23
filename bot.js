@@ -26,9 +26,6 @@ for (const file of eventFiles) {
 	}
 }
 
-// Webhook Init
-const webhookClient = new Discord.WebhookClient({ id: config.botuser.webhookId, token: config.botuser.webhookToken })
-
 if(config.env === 'dev') {
     client.login(config.botuser.dev_token);
 } else if (config.env === 'prod') {
@@ -37,6 +34,7 @@ if(config.env === 'dev') {
 
 // Exit handling
 process.on('SIGINT', async () => {
+	var webhookClient = new Discord.WebhookClient({ id: config.botuser.webhookId, token: config.botuser.webhookToken })
 	console.log(chalk.redBright.bold(`Recieved shutdown command (SIGINT)! Powering down..`))
 
 	if(config.env === `prod`) {
@@ -58,14 +56,14 @@ process.on('SIGINT', async () => {
 })
 
 process.on('uncaughtException', async (error) => {
-	const webhookClient = new discord.WebhookClient({ id: config.botuser.webhookId, token: config.botuser.webhookToken })
+	var webhookClient = new Discord.WebhookClient({ id: config.botuser.webhookId, token: config.botuser.webhookToken })
 	console.log(chalk.redBright.bold(`Uncaught Exception Detected!\n${error}`))
 
 	const uncaughtEmbed = new Discord.MessageEmbed()
 	.setTitle(`SplitStat - Uncaught Exception`)
 	.setDescription(`SplitStat encountered an uncaught exception at **<t:${Math.round(Date.now() / 1000)}:f>**!\n**${error}**`)
 	if (config.env === `prod`) {
-		webhookClient.send({
+		await webhookClient.send({
 			username: 'SplitStat - Uncaught Exception',
 			content: '<@288101780074528768>',
 			avatarURL: 'https://cdn.discordapp.com/app-icons/868689248218411050/cfb8eb37a8dcacefc9228d0949667ff1.png',

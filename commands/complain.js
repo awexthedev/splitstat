@@ -15,10 +15,10 @@ module.exports = {
         var complaint = interaction.options.getString('complaint')
 
         const complaintEmbed = new discord.MessageEmbed()
-        .setTitle(`SplitStat Complaint from ${interaction.user.tag}`)
+        .setAuthor(`Complaint from ${interaction.user.tag}`, `${interaction.user.avatarURL()}`)
         .setDescription(`${complaint}`)
 
-        webhookClient.send({
+        await webhookClient.send({
             username: 'Splitstat - Complaint',
             avatarURL: 'https://cdn.discordapp.com/app-icons/868689248218411050/cfb8eb37a8dcacefc9228d0949667ff1.png',
             embeds: [complaintEmbed],
