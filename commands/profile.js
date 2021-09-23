@@ -18,6 +18,11 @@ module.exports = {
         option.setName(`player`)
         .setDescription(`Your ID/Gamertag! For Steam, your Steam Profile URL!.`)
               .setRequired(true))),
+              deprecated: {
+                'status': null,
+                'date': null,
+                'reason': null
+            },
     async execute(interaction) {
             const platform = interaction.options.getString(`platform`);
             const player = interaction.options.getString('player');

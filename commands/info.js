@@ -6,6 +6,11 @@ module.exports = {
     data: new SlashCommandBuilder()
     .setName(`info`)
     .setDescription(`Info about this bot!`),
+    deprecated: {
+        'status': null,
+        'date': null,
+        'reason': null
+    },
     async execute(interaction) {
         const infoEmbed = new discord.MessageEmbed()
         .setAuthor(`SplitStat Bot`, `https://images.mmorpg.com/images/games/logos/32/1759_32.png?cb=87A6A764853AF7668409F25907CC7EC4`)

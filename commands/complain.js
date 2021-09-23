@@ -9,6 +9,11 @@ module.exports = {
     .setName(`complain`)
     .setDescription(`Complain to the developer! Do it! Any issue!`)
     .addStringOption(option => option.setName(`complaint`).setDescription(`Anything and everything!`).setRequired(true)),
+    deprecated: {
+        'status': null,
+        'date': null,
+        'reason': null
+    },
     async execute(interaction) {
 
         const webhookClient = new discord.WebhookClient({ id: config.botuser.webhookId, token: config.botuser.webhookToken })

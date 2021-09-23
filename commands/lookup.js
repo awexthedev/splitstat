@@ -29,6 +29,11 @@ module.exports = {
             .addChoice('Streaks', 'streaks')
             .addChoice('Player', 'player')
     )),
+    deprecated: {
+        'status': null,
+        'date': null,
+        'reason': null
+    },
     async execute(interaction) {
             const platform = interaction.options.getString('platform')
             const player = interaction.options.getString('player')

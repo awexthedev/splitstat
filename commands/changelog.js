@@ -5,6 +5,11 @@ module.exports = {
     data: new SlashCommandBuilder()
     .setName(`changelog`)
     .setDescription(`See new features added to this bot!`),
+    deprecated: {
+      'status': null,
+      'date': null,
+      'reason': null
+  },
     async execute(interaction) {
       const changelogEmbed = new discord.MessageEmbed()
       .setAuthor(`SplitStat Bot`, `https://images.mmorpg.com/images/games/logos/32/1759_32.png?cb=87A6A764853AF7668409F25907CC7EC4`)
