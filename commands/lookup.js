@@ -34,7 +34,7 @@ module.exports = {
             const player = interaction.options.getString('player')
             const category = interaction.options.getString('category')
 
-            await api.fetchTrnApi(player, platform, interaction)
+            await api.fetchTrnApi(player, platform)
 
             if (api.errmsg === `User ${player} doesn't exist in Tracker Network's ${platform} API`) {
                 const fourohfour = new discord.MessageEmbed()
@@ -172,46 +172,28 @@ module.exports = {
                 .setColor(`#2c1178`)
                 .setTitle(`Player Information`)
                 .addFields(
-                    { name: 'KD', value: `${api.trn.data.segments[0].stats.kd.value}`, inline: true },
-                    { name: 'KAD', value: `${api.trn.data.segments[0].stats.kad.value}`, inline: true },
-                    { name: 'Points', value: `${api.trn.data.segments[0].stats.points.value}`, inline: true },
-                    { name: 'Deaths', value: `${api.trn.data.segments[0].stats.deaths.value}`, inline: true },
-                    { name: 'Suicides', value: `${api.trn.data.segments[0].stats.suicides.value}`, inline: true },
-                    { name: 'Teabags', value: `${api.trn.data.segments[0].stats.teabags.value}`, inline: true },
-                    { name: 'Damage Dealt', value: `${api.trn.data.segments[0].stats.damageDealt.value}`, inline: true },
-                    { name: 'Matches Played', value: `${api.trn.data.segments[0].stats.matchesPlayed.value}`, inline: true },
-                    { name: 'Wins', value: `${api.trn.data.segments[0].stats.wins.value}`, inline: true },
-                    { name: 'Losses', value: `${api.trn.segments[0].stats.losses.value}`, inline: true },
-                    { name: 'Time Played', value: `${api.trn.segments[0].stats.timePlayed.value}`, inline: true },
-                    { name: 'Progression XP', value: `${api.trn.segments[0].stats.progressionXp.value}`, inline: true },
-                    { name: 'Progression Level', value: `${api.trn.segments[0].stats.progressionLevel.value}`, inline: true },
-                    { name: 'Rank XP', value: `${api.trn.data.segments[0].stats.rankXp.value}`, inline: true },
-                    { name: 'Rank Level', value: `${api.trn.data.segments[0].stats.rankLevel.value}`, inline: true },
-                    { name: 'Shots Fired', value: `${api.trn.data.segments[0].stats.shotsFired.value}`, inline: true },
-                    { name: 'Shots Landed', value: `${api.trn.data.segments[0].stats.shotsLanded.value}`, inline: true }
+                    { name: 'KD', value: `${api.trn.kd.value}`, inline: true },
+                    { name: 'KAD', value: `${api.trn.kad.value}`, inline: true },
+                    { name: 'Points', value: `${api.trn.points.value}`, inline: true },
+                    { name: 'Deaths', value: `${api.trn.deaths.value}`, inline: true },
+                    { name: 'Suicides', value: `${api.trn.suicides.value}`, inline: true },
+                    { name: 'Teabags', value: `${api.trn.teabags.value}`, inline: true },
+                    { name: 'Damage Dealt', value: `${api.trn.damageDealt.value}`, inline: true },
+                    { name: 'Matches Played', value: `${api.trn.matchesPlayed.value}`, inline: true },
+                    { name: 'Wins', value: `${api.trn.wins.value}`, inline: true },
+                    { name: 'Losses', value: `${api.trn.losses.value}`, inline: true },
+                    { name: 'Time Played', value: `${api.trn.timePlayed.value}`, inline: true },
+                    { name: 'Progression XP', value: `${api.trn.progressionXp.value}`, inline: true },
+                    { name: 'Progression Level', value: `${api.trn.progressionLevel.value}`, inline: true },
+                    { name: 'Rank XP', value: `${api.trn.rankXp.value}`, inline: true },
+                    { name: 'Rank Level', value: `${api.trn.rankLevel.value}`, inline: true },
+                    { name: 'Shots Fired', value: `${api.trn.shotsFired.value}`, inline: true },
+                    { name: 'Shots Landed', value: `${api.trn.shotsLanded.value}`, inline: true }
                 )
                 .setFooter(`SplitStat`)
                 .setTimestamp();
 
                 return await interaction.reply({ embeds: [ playerEmbed ] });
-            } else {
-                const missingArgs = new discord.MessageEmbed()
-                .setAuthor(`SplitStat Bot`, `https://images.mmorpg.com/images/games/logos/32/1759_32.png?cb=87A6A764853AF7668409F25907CC7EC4`)
-                .setTitle(`Not so fast!`)
-                .setColor(`#2c1178`)
-                .setDescription('Uh oh! You provided a category to check, but you provided an incorrect one!')
-                .addFields(
-                    { name: 'Kills', value: 'Totals/Information of Kills' },
-                    { name: 'Accuracy', value: 'Total Accuracy with weapons' },
-                    { name: 'Special', value: 'Misc information; oddball pickups, flag pickups etc' },
-                    { name: 'Player', value: 'Player info, like KD' },
-                    { name: 'Streaks', value: 'Killstreak Information' },
-                    { name: 'Portal', value: 'Things with portals. Kills through them, destroyed etc.'}
-                )
-                .setFooter(`SplitStat`)
-                .setTimestamp();
-    
-                return await interaction.reply({ embeds: [ missingArgs ] })
-            }
+        }
     }
 }

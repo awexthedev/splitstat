@@ -17,7 +17,6 @@ for (const file of commandFiles) {
 
 // Event Handling
 const eventFiles = fs.readdirSync('./events').filter(file => file.endsWith('.js'));
-
 for (const file of eventFiles) {
 	const event = require(`./events/${file}`);
 	if (event.once) {

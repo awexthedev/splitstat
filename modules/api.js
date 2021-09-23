@@ -1,8 +1,7 @@
 var config = require('../configd.json');
-var chalk = require('chalk');
 var fetch = require('node-fetch')
 
-async function fetchTrnApi(user, platform, int) {
+async function fetchTrnApi(user, platform) {
     // Steam URL
     if(platform === `steam`) {
         if(user.startsWith(`https`) || user.startsWith(`http`)) {
@@ -11,13 +10,8 @@ async function fetchTrnApi(user, platform, int) {
                 const { response } = await fetch(`https://api.steampowered.com/ISteamUser/ResolveVanityURL/v0001/?key=${config.botuser.steam_api}&vanityurl=${part}`).then(response => response.json());
                 var part = response.steamid
             }
-        } else {
-            module.exports.error = error
-            return module.exports.errmsg = `Need to provide a URL for Steam user!`
-        }
-    } else {
-        var part = user;
-    }
+        } else return module.exports.errmsg = `Need to provide a URL for Steam user!`
+    } else var part = user;
 
     const data = await fetch(`https://public-api.tracker.gg/v2/splitgate/standard/profile/${platform}/${part}`, {
         method: 'GET',

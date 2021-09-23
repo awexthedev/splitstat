@@ -22,7 +22,7 @@ module.exports = {
             const platform = interaction.options.getString(`platform`);
             const player = interaction.options.getString('player');
 
-            await api.fetchTrnApi(player, platform, interaction)
+            await api.fetchTrnApi(player, platform)
 
             if (api.errmsg === `User ${player} doesn't exist in Tracker Network's ${platform} API`) {
                 const fourohfour = new discord.MessageEmbed()
