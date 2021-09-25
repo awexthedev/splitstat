@@ -29,11 +29,16 @@ module.exports = {
             .addChoice('Streaks', 'streaks')
             .addChoice('Player', 'player')
     )),
-    deprecated: {
-        'status': null,
-        'date': null,
-        'reason': null
-    },
+    info: {
+        "name": 'Lookup',
+        "description": "The main thing! Look up your username to get the latest, real-time stats!",
+        "image": "https://scr.awexxx.xyz/upload?view=DiscordCanary_1dJ1mOhKrX.png",
+          "deprecated": {
+            'status': null,
+            'date': null,
+            'reason': null
+          },
+        },
     async execute(interaction) {
             const platform = interaction.options.getString('platform')
             const player = interaction.options.getString('player')
