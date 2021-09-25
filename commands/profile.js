@@ -18,16 +18,21 @@ module.exports = {
         option.setName(`player`)
         .setDescription(`Your ID/Gamertag! For Steam, your Steam Profile URL!.`)
               .setRequired(true))),
-              deprecated: {
-                'status': null,
-                'date': null,
-                'reason': null
-            },
+              info: {
+                "name": 'Profile',
+                "description": "See a summary of your Tracker Network Profile!",
+                "image": "https://scr.awexxx.xyz/upload?view=DiscordCanary_rZYp5vvlV7.png",
+                  "deprecated": {
+                    'status': null,
+                    'date': null,
+                    'reason': null
+                  },
+                },
     async execute(interaction) {
             const platform = interaction.options.getString(`platform`);
             const player = interaction.options.getString('player');
 
-            await api.fetchTrnApi(player, platform)
+            await api.fetchTrnApi(player.toLowerCase(), platform)
 
             if (api.errmsg === `User ${player} doesn't exist in Tracker Network's ${platform} API`) {
                 const fourohfour = new discord.MessageEmbed()
@@ -76,6 +81,7 @@ module.exports = {
             .setFooter(`SplitStat`)
             .setTimestamp();
     
-            return await interaction.reply({ embeds: [ profileEmbed ] })
+            await interaction.deferReply()
+            await interaction.editReply({ embeds: [ profileEmbed ] })
     }
 }
