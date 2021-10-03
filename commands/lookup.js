@@ -48,7 +48,7 @@ module.exports = {
                 .setTitle(`Not so fast!`)
                 .setColor(`#2c1178`)
                 .setDescription(`Woah there! **${player}** wasn't found in Tracker Network's ${platform} API! Are you sure it was the right name & platform?`)
-                .setFooter(`SplitStat`)
+                .setFooter(`SplitStat | /discord`)
                 .setTimestamp();
     
                 return await interaction.reply({ embeds: [ fourohfour ] })
@@ -58,7 +58,7 @@ module.exports = {
                 .setTitle(`Not so fast!`)
                 .setColor(`#2c1178`)
                 .setDescription('Uh oh! You used **Steam** as a way to find your stats. I need a URL to your Steam profile, not your username!')
-                .setFooter(`SplitStat`)
+                .setFooter(`SplitStat | /discord`)
                 .setTimestamp();
     
                 return await interaction.reply({ embeds: [ noUrl ] })
@@ -68,7 +68,7 @@ module.exports = {
                 .setTitle(`Not so fast!`)
                 .setColor(`#2c1178`)
                 .setDescription('Uh oh! Something went wrong during the processing phase that was not handled. This has been reported to Awex and will be fixed soon.\n**Error: `' + api.errmsg + '`**')
-                .setFooter(`SplitStat`)
+                .setFooter(`SplitStat | /discord`)
                 .setTimestamp();
     
                 return await interaction.reply({ embeds: [ unhandledError ] })
@@ -98,7 +98,7 @@ module.exports = {
                     { name: 'Assists', value: `${api.trn.assists.value}`, inline: true },
                     { name: 'Total Kills', value: `${api.trn.kills.value}`, inline: true }
                 )
-                .setFooter(`SplitStat`)
+                .setFooter(`SplitStat | /discord`)
                 .setTimestamp();
 
                 return await interaction.reply({ embeds: [killEmbed] })
@@ -113,7 +113,7 @@ module.exports = {
                     { name: 'Shots Landed', value: `${api.trn.shotsLanded.value}`, inline: true },
                     { name: 'Headshot Accuracy', value: `${api.trn.headshotAccuracy.value}`, inline: true }
                 )
-                .setFooter(`SplitStat`)
+                .setFooter(`SplitStat | /discord`)
                 .setTimestamp();
 
                 return await interaction.reply({ embeds: [accuracyEmbed] })
@@ -130,7 +130,7 @@ module.exports = {
                     { name: 'Oddballs Picked Up', value: `${api.trn.oddballsPickedUp.value}`, inline: true },
                     { name: 'Teabags Denied', value: `${api.trn.teabagsDenied.value}`, inline: true }
                 )
-                .setFooter(`SplitStat`)
+                .setFooter(`SplitStat | /discord`)
                 .setTimestamp();
 
                 return await interaction.reply({ embeds: [specialEmbed] })
@@ -150,7 +150,7 @@ module.exports = {
                     { name: 'Distance Portaled', value: `${api.trn.distancePortaled.value}` },
                     { name: 'Ally Portals Entered', value: `${api.trn.allyPortalsEntered.value}` }
                 )
-                .setFooter(`SplitStat`)
+                .setFooter(`SplitStat | /discord`)
                 .setTimestamp();
 
                 return await interaction.reply({ embeds: [portalEmbed] })
@@ -168,7 +168,7 @@ module.exports = {
                     { name: '10 Kills', value: `${api.trn.medalKillstreak2.value}`, inline: true },
                     { name: '5 kills', value: `${api.trn.medalKillstreak1.value}`, inline: true }
                 )
-                .setFooter(`SplitStat`)
+                .setFooter(`SplitStat | /discord`)
                 .setTimestamp();
 
                 return await interaction.reply({ embeds: [streakEmbed] })
@@ -196,7 +196,7 @@ module.exports = {
                     { name: 'Shots Fired', value: `${api.trn.shotsFired.value}`, inline: true },
                     { name: 'Shots Landed', value: `${api.trn.shotsLanded.value}`, inline: true }
                 )
-                .setFooter(`SplitStat`)
+                .setFooter(`SplitStat | /discord`)
                 .setTimestamp();
 
                 return await interaction.reply({ embeds: [ playerEmbed ] });

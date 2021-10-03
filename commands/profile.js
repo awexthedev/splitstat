@@ -36,7 +36,7 @@ module.exports = {
                 .setTitle(`Not so fast!`)
                 .setColor(`#2c1178`)
                 .setDescription(`Woah there! **${player}** wasn't found in Tracker Network's ${platform} API! Are you sure it was the right name & platform?`)
-                .setFooter(`SplitStat`)
+                .setFooter(`SplitStat | /discord`)
                 .setTimestamp();
     
                 return await interaction.reply({ embeds: [ fourohfour ] })
@@ -46,7 +46,7 @@ module.exports = {
                 .setTitle(`Not so fast!`)
                 .setColor(`#2c1178`)
                 .setDescription('Uh oh! You used **Steam** as a way to find your stats. I need a URL to your Steam profile, not your username!')
-                .setFooter(`SplitStat`)
+                .setFooter(`SplitStat | /discord`)
                 .setTimestamp();
     
                 return await interaction.reply({ embeds: [ noUrl ] })
@@ -56,7 +56,7 @@ module.exports = {
                 .setTitle(`Not so fast!`)
                 .setColor(`#2c1178`)
                 .setDescription('Uh oh! Something went wrong during the processing phase that was not handled. This has been reported to Awex and will be fixed soon.\n**Error: `' + api.errmsg + '`**')
-                .setFooter(`SplitStat`)
+                .setFooter(`SplitStat | /discord`)
                 .setTimestamp();
     
                 return await interaction.reply({ embeds: [ unhandledError ] })
@@ -67,13 +67,13 @@ module.exports = {
             .setColor(`#2c1178`)
             .setTitle(`${api.allObjects.platformInfo.platformUserHandle} -- ${platform}`)
             .addFields(
-                { name: `Country Code`, value: `${api.allObjects.userInfo.userId}`, inline: true },
+                { name: `Country Code`, value: `${api.allObjects.userInfo.countryCode}`, inline: true },
                 { name: `Partner?`, value: `${api.allObjects.userInfo.isPartner}`, inline: true },
                 { name: `Verified?`, value: `${api.allObjects.userInfo.isVerified}`, inline: true },
                 { name: `Influencer?`, value: `${api.allObjects.userInfo.isInfluencer}`, inline: true },
                 { name: 'TRN Premium?', value: `${api.allObjects.userInfo.isPremium}`, inline: true }
             )
-            .setFooter(`SplitStat`)
+            .setFooter(`SplitStat | /discord`)
             .setTimestamp();
     
             await interaction.reply({ embeds: [ profileEmbed ] })

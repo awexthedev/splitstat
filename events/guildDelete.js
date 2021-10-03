@@ -10,7 +10,7 @@ module.exports = {
         .setAuthor(`SplitStat Bot`, `https://images.mmorpg.com/images/games/logos/32/1759_32.png?cb=87A6A764853AF7668409F25907CC7EC4`)
         .setColor(`#2c1178`)
         .setTitle(`Left server!`)
-        .setDescription(`SplitStat has left **${guild.name}**!`)
+        .setDescription(`SplitStat has left **${guild.name}** at <t:${guild.joinedTimestamp}:f>!`)
 
         webhookClient.send({
             username: `SplitStat - Left server!`,

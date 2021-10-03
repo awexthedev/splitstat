@@ -21,6 +21,7 @@ module.exports = {
                 .addChoice(`Ping`, `ping`)
                 .addChoice(`Changelog`, `changelog`)
                 .addChoice(`Complain`, `complain`)
+                .addChoice(`Discord`, `discord`)
                 .addChoice(`Info`, `info`)),
     async execute(interaction) {
         var option = interaction.options.getString(`command`);
@@ -34,7 +35,7 @@ module.exports = {
             { name: 'Usage', value: `${command.info.usage}` }
         )
         .setColor(`#2c1178`)
-        .setFooter(`SplitStat`)
+        .setFooter(`SplitStat | /discord`)
         .setTimestamp();
 
         if(command.info.image !== null) {

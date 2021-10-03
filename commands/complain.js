@@ -29,6 +29,6 @@ module.exports = {
             embeds: [complaintEmbed],
         });
 
-        return await interaction.reply('Got it! I sent that to the developer of this bot!\nYour complaint: `' + complaint + '`')
+        return await interaction.reply('Got it! I sent that to the developer of this bot! You should probably also join the Discord here: https://dsc.gg/splitstat\nYour complaint: `' + complaint + '`')
     }
 }

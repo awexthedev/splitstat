@@ -22,9 +22,10 @@ module.exports = {
         { name: 'Switched to axios', value: `Zoomy fetching for all!` },
         { name: 'Implemented some caching', value: `Started caching some results for up to 30 minutes` },
         { name: 'Rewrote some events', value: 'This helped improve some events.. like.. a *lot*' },
-        { name: 'Completely removed the message event', value: `spl! will no longer return anything!` }
+        { name: 'Completely removed the message event', value: `spl! will no longer return anything!` },
+        { name: 'Added /discord', value: `Gives you the link to a support Discord!` }
       )
-      .setFooter(`SplitStat`)
+      .setFooter(`SplitStat | /discord`)
       .setTimestamp();
 
     return await interaction.reply({ embeds: [changelogEmbed] });
