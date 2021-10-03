@@ -5,6 +5,8 @@ module.exports = {
     on: true,
     async execute(guild) {
         const joinEmbed = new discord.MessageEmbed()
+        .setAuthor(`SplitStat Bot`, `https://images.mmorpg.com/images/games/logos/32/1759_32.png?cb=87A6A764853AF7668409F25907CC7EC4`)
+        .setColor(`#2c1178`)
         .setTitle(`New server!`)
         .setDescription(`SplitStat has joined **${guild.name}**!`)
 

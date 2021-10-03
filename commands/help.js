@@ -7,12 +7,8 @@ module.exports = {
         "name": 'Help',
         "description": "Find out how to work this bot!",
         "image": null,
-          "deprecated": {
-            'status': null,
-            'date': null,
-            'reason': null
-          },
-        },
+        "usage": "/help [command]"
+    },
     data: new SlashCommandBuilder()
         .setName(`help`)
         .setDescription(`Help with the SplitStat bot!`)
@@ -34,6 +30,9 @@ module.exports = {
         .setAuthor(`SplitStat Bot`, `https://images.mmorpg.com/images/games/logos/32/1759_32.png?cb=87A6A764853AF7668409F25907CC7EC4`)
         .setTitle(`Command Help - ${command.info.name}`)
         .setDescription(command.info.description)
+        .addFields(
+            { name: 'Usage', value: `${command.info.usage}` }
+        )
         .setColor(`#2c1178`)
         .setFooter(`SplitStat`)
         .setTimestamp();

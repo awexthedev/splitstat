@@ -1,7 +1,6 @@
 const Discord = require('discord.js');
 const fs = require('fs');
 const chalk = require('chalk');
-const process = require('process');
 const config = require('./configd.json');
 
 const client = new Discord.Client({ intents: [Discord.Intents.FLAGS.GUILDS, Discord.Intents.FLAGS.GUILD_MESSAGES] });
@@ -39,6 +38,8 @@ process.on('SIGINT', async () => {
 
 	if(config.env === `prod`) {
 		const exitEmbed = new Discord.MessageEmbed()
+		.setAuthor(`SplitStat Bot`, `https://images.mmorpg.com/images/games/logos/32/1759_32.png?cb=87A6A764853AF7668409F25907CC7EC4`)
+		.setColor(`#2c1178`)
 		.setTitle(`SplitStat - Shutting Down!`)
 		.setDescription(`SplitStat shut down at **<t:${Math.round(Date.now() / 1000)}:f>**!\nClient was **${client.user.tag}**.`)
 	
@@ -55,11 +56,14 @@ process.on('SIGINT', async () => {
 	process.exit();
 })
 
+// Uncaught Exception Handler
 process.on('uncaughtException', async (error) => {
 	var webhookClient = new Discord.WebhookClient({ id: config.botuser.webhookId, token: config.botuser.webhookToken })
 	console.log(chalk.redBright.bold(`Uncaught Exception Detected!\n${error}`))
 
 	const uncaughtEmbed = new Discord.MessageEmbed()
+	.setAuthor(`SplitStat Bot`, `https://images.mmorpg.com/images/games/logos/32/1759_32.png?cb=87A6A764853AF7668409F25907CC7EC4`)
+	.setColor(`#2c1178`)
 	.setTitle(`SplitStat - Uncaught Exception`)
 	.setDescription(`SplitStat encountered an uncaught exception at **<t:${Math.round(Date.now() / 1000)}:f>**!\n**${error}**`)
 	if (config.env === `prod`) {

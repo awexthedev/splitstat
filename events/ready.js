@@ -12,6 +12,8 @@ module.exports = {
         client.user.setActivity("/help", { type: 'PLAYING' });
 
         const startEmbed = new discord.MessageEmbed()
+        .setAuthor(`SplitStat Bot`, `https://images.mmorpg.com/images/games/logos/32/1759_32.png?cb=87A6A764853AF7668409F25907CC7EC4`)
+        .setColor(`#2c1178`)
         .setTitle(`SplitStat has started!`)
         .setDescription(`Logged in as **${client.user.tag}.**\nI'm currently in **${client.guilds.cache.size} guilds!**\nEnvironment: **${config.env}**`)
         

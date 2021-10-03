@@ -22,17 +22,13 @@ module.exports = {
                 "name": 'Profile',
                 "description": "See a summary of your Tracker Network Profile!",
                 "image": "https://scr.awexxx.xyz/upload?view=DiscordCanary_rZYp5vvlV7.png",
-                  "deprecated": {
-                    'status': null,
-                    'date': null,
-                    'reason': null
-                  },
+                "usage": "/profile [platform] [user]"
                 },
     async execute(interaction) {
             const platform = interaction.options.getString(`platform`);
             const player = interaction.options.getString('player');
 
-            await api.fetchTrnApi(player.toLowerCase(), platform)
+            await api.fetchTrnApi(player.toLowerCase(), platform, interaction.user.id);
 
             if (api.errmsg === `User ${player} doesn't exist in Tracker Network's ${platform} API`) {
                 const fourohfour = new discord.MessageEmbed()
@@ -54,7 +50,7 @@ module.exports = {
                 .setTimestamp();
     
                 return await interaction.reply({ embeds: [ noUrl ] })
-            } else if(api.error === true || !api.trn) {
+            } else if(api.error === true) {
                 const unhandledError = new discord.MessageEmbed()
                 .setAuthor(`SplitStat Bot`, `https://images.mmorpg.com/images/games/logos/32/1759_32.png?cb=87A6A764853AF7668409F25907CC7EC4`)
                 .setTitle(`Not so fast!`)
@@ -69,19 +65,17 @@ module.exports = {
             const profileEmbed = new discord.MessageEmbed()
             .setAuthor(`SplitStat Bot`, `https://images.mmorpg.com/images/games/logos/32/1759_32.png?cb=87A6A764853AF7668409F25907CC7EC4`)
             .setColor(`#2c1178`)
-            .setTitle(`${api.profile.platformInfo.platformUserHandle} -- ${platform}`)
+            .setTitle(`${api.allObjects.platformInfo.platformUserHandle} -- ${platform}`)
             .addFields(
-                { name: `Country Code`, value: `${api.profile.userInfo.countryCode}`, inline: true },
-                { name: `User ID`, value: `${api.profile.userInfo.userId}`, inline: true },
-                { name: `Partner?`, value: `${api.profile.userInfo.isPartner}`, inline: true },
-                { name: `Verified?`, value: `${api.profile.userInfo.isVerified}`, inline: true },
-                { name: `Influencer?`, value: `${api.profile.userInfo.isInfluencer}`, inline: true },
-                { name: 'TRN Premium?', value: `${api.profile.userInfo.isPremium}`, inline: true }
+                { name: `Country Code`, value: `${api.allObjects.userInfo.userId}`, inline: true },
+                { name: `Partner?`, value: `${api.allObjects.userInfo.isPartner}`, inline: true },
+                { name: `Verified?`, value: `${api.allObjects.userInfo.isVerified}`, inline: true },
+                { name: `Influencer?`, value: `${api.allObjects.userInfo.isInfluencer}`, inline: true },
+                { name: 'TRN Premium?', value: `${api.allObjects.userInfo.isPremium}`, inline: true }
             )
             .setFooter(`SplitStat`)
             .setTimestamp();
     
-            await interaction.deferReply()
-            await interaction.editReply({ embeds: [ profileEmbed ] })
+            await interaction.reply({ embeds: [ profileEmbed ] })
     }
 }

@@ -33,12 +33,8 @@ module.exports = {
         "name": 'Lookup',
         "description": "The main thing! Look up your username to get the latest, real-time stats!",
         "image": "https://scr.awexxx.xyz/upload?view=DiscordCanary_1dJ1mOhKrX.png",
-          "deprecated": {
-            'status': null,
-            'date': null,
-            'reason': null
-          },
-        },
+        "usage": "/lookup [platform] [user] [category]"
+    },
     async execute(interaction) {
             const platform = interaction.options.getString('platform')
             const player = interaction.options.getString('player')
@@ -115,7 +111,7 @@ module.exports = {
                     { name: 'Headshots Landed', value: `${api.trn.headshotsLanded.value}`, inline: true },
                     { name: 'Shots Accuracy', value: `${api.trn.shotsAccuracy.value}`, inline: true },
                     { name: 'Shots Landed', value: `${api.trn.shotsLanded.value}`, inline: true },
-                    { name: 'Headhot Accuracy', value: `${api.trn.headshotAccuracy.value}`, inline: true }
+                    { name: 'Headshot Accuracy', value: `${api.trn.headshotAccuracy.value}`, inline: true }
                 )
                 .setFooter(`SplitStat`)
                 .setTimestamp();

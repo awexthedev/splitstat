@@ -6,11 +6,7 @@ module.exports = {
     "name": 'changelog',
     "description": "See new features added to this bot!",
     "image": null,
-      "deprecated": {
-        'status': null,
-        'date': null,
-        'reason': null
-      },
+    "usage": "/changelog"
     },
     data: new SlashCommandBuilder()
     .setName(`changelog`)
@@ -22,8 +18,10 @@ module.exports = {
       .setTitle(`Latest Changelog - 09/25/2021`)
       .setDescription(`Dynamic help menu, fixed stuff, and more!\nThis update brings SplitStat to **Version 3.1!**`)
       .addFields(
-        { name: 'Dynamic Help Menu', value: `Brand new help menu! Less code, more info!` },
-        { name: 'Fixed capital URL issue', value: `Fixed a bug where if your Steam link started with "HTTPS" instead of "https", it would error out.` }
+        { name: 'Added usage to help menu', value: `Not *really* important with slash commands but still pretty poggers!` },
+        { name: 'Switched to axios', value: `Zoomy fetching for all!` },
+        { name: 'Implemented some caching', value: `Started caching some results for up to 30 minutes` },
+        { name: 'Rewrote some events', value: 'This helped improve some events.. like.. a *lot*' }
       )
       .setFooter(`SplitStat`)
       .setTimestamp();

@@ -1,4 +1,3 @@
-const fetch = require('node-fetch');
 var config = require('../configd.json')
 const { SlashCommandBuilder } = require('@discordjs/builders');
 const discord = require('discord.js');
@@ -13,12 +12,8 @@ module.exports = {
         "name": 'Complain',
         "description": "Complain about the bot -- anything! Suggestions, issues and more!",
         "image": null,
-          "deprecated": {
-            'status': null,
-            'date': null,
-            'reason': null
-          },
-        },
+        "usage": "/complain [complaint]"
+    },
     async execute(interaction) {
 
         const webhookClient = new discord.WebhookClient({ id: config.botuser.webhookId, token: config.botuser.webhookToken })
