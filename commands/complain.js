@@ -16,7 +16,7 @@ module.exports = {
     },
     async execute(interaction) {
 
-        const webhookClient = new discord.WebhookClient({ id: config.botuser.webhookId, token: config.botuser.webhookToken })
+        const webhookClient = new discord.WebhookClient({ id: config.botuser.webhooks.classic.webhookId, token: config.botuser.webhooks.classic.webhookToken })
         var complaint = interaction.options.getString('complaint')
 
         const complaintEmbed = new discord.MessageEmbed()

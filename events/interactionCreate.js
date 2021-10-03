@@ -16,7 +16,7 @@ module.exports = {
                 await command.execute(interaction);
             } catch (error) {
                 await interaction.reply({ content: 'There was an error while executing this command! This has been sent to Awex!\n**Error:** ' + '`' + error.message + '`' });
-                const webhookClient = new Discord.WebhookClient({ id: config.botuser.webhookId, token: config.botuser.webhookToken });
+                const webhookClient = new Discord.WebhookClient({ id: config.botuser.webhooks.classic.webhookId, token: config.botuser.webhooks.classic.webhookToken });
 
                 var time = Date.now();
                 const errorEmbed = new Discord.MessageEmbed()

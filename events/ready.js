@@ -1,6 +1,9 @@
 const chalk = require('chalk');
 const discord = require('discord.js');
 const config = require('../configd.json');
+        
+const api = require('../modules/server.js');
+
 module.exports = {
 	name: 'ready',
 	once: true,
@@ -17,7 +20,7 @@ module.exports = {
         .setTitle(`SplitStat has started!`)
         .setDescription(`Logged in as **${client.user.tag}.**\nI'm currently in **${client.guilds.cache.size} guilds!**\nEnvironment: **${config.env}**`)
         
-        const webhookClient = new discord.WebhookClient({ id: config.botuser.webhookId, token: config.botuser.webhookToken })
+        const webhookClient = new discord.WebhookClient({ id: config.botuser.webhooks.classic.webhookId, token: config.botuser.webhooks.classic.webhookToken })
 
                 webhookClient.send({
                         username: `SplitStat - Starting!`,

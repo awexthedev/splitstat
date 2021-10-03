@@ -4,7 +4,7 @@ module.exports = {
     name: `guildDelete`,
     on: true,
     async execute(guild) {
-        const webhookClient = new discord.WebhookClient({ id: config.botuser.webhookId, token: config.botuser.webhookToken })
+        const webhookClient = new discord.WebhookClient({ id: config.botuser.webhooks.classic.webhookId, token: config.botuser.webhooks.classic.webhookToken })
 
         const leaveEmbed = new discord.MessageEmbed()
         .setAuthor(`SplitStat Bot`, `https://images.mmorpg.com/images/games/logos/32/1759_32.png?cb=87A6A764853AF7668409F25907CC7EC4`)
