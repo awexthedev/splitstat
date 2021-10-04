@@ -13,7 +13,11 @@ app.use(cors());
 const webhookClient = new discord.WebhookClient({ id: config.botuser.webhooks.voting.webhookId, token: config.botuser.webhooks.voting.webhookToken });
 
 app.get('/', (req, res) => {
-    res.send({ "status": 200 });
+    return res.redirect(`https://awexxx.xyz/`)
+})
+
+app.get('/heartbeat', (req, res) => {
+    return res.status(200).send({ "status": 200, "message": "API Online!"})
 })
 
 app.post('/webhook', async (req, res) => {
@@ -33,7 +37,7 @@ app.post('/webhook', async (req, res) => {
         return res.status(500).send({ "status": 500, "errors": err.message })
     }
 
-    return res.status(200).send({ "status": 200 })
+    return res.status(200).send({ "status": 200, "message": "Event successfully emitted to Discord" })
 })
 
 app.listen(1330, () => {
