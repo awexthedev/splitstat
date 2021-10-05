@@ -13,16 +13,22 @@ module.exports = {
             return await interaction.reply(`Hey, **${interaction.user.tag}**!\nThis command is now **deprecated** and is due to be removed from the bot.\n\n**Date of Deprecation: ${command.info.deprecated.date}**\n**Reason of Deprecation: ${command.info.deprecated.reason}**`)
         } else {
             try {
+                console.log(`${interaction.user.tag} just ran ${command.name} in ${interaction.member.guild}!`)
                 await command.execute(interaction);
             } catch (error) {
                 await interaction.reply({ content: 'There was an error while executing this command! This has been sent to Awex!\n**Error:** ' + '`' + error.message + '`' });
-                const webhookClient = new Discord.WebhookClient({ id: config.botuser.webhooks.classic.webhookId, token: config.botuser.webhooks.classic.webhookToken });
+                const webhookClient = new Discord.WebhookClient({ id: config.botuser.webhooks.errors.webhookId, token: config.botuser.webhooks.errors.webhookToken });
 
                 var time = Date.now();
                 const errorEmbed = new Discord.MessageEmbed()
                 .setAuthor(`SplitStat Bot`, `https://images.mmorpg.com/images/games/logos/32/1759_32.png?cb=87A6A764853AF7668409F25907CC7EC4`)
                 .setColor(`#2c1178`)
                 .setTitle(`SplitStat Error!`)
+                .addFields(
+                    { name: 'Guild', value: `${interaction.member.guild.name}`, inline: true },
+                    { name: 'User', value: `${interaction.user.tag}`, inline: true },
+                    { name: 'Command', value: `${command.name}`, inline: true }
+                )
                 .setDescription(`SplitStat encountered an error at <t:${Math.round(time / 1000)}:f>.\n\n**Error Type: ${error.name}**\n**Full Error: ${error.message}**`)
 
                 return webhookClient.send({

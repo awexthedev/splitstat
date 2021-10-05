@@ -18,7 +18,6 @@ async function fetchTrnApi(user, platform) {
             headers: { 'TRN-Api-Key': `${config.botuser.trn_api}` }
         }) 
     } catch (error) {
-        var jsonError = error.toJSON();
         return module.exports.errmsg = `User ${user} doesn't exist in Tracker Network's ${platform} API`
     }
 

@@ -33,7 +33,7 @@ if(config.env === 'dev') {
 
 // Exit handling
 process.on('SIGINT', async () => {
-	var webhookClient = new Discord.WebhookClient({ id: config.botuser.webhooks.classic.webhookId, token: config.botuser.webhooks.classic.webhookToken })
+	var webhookClient = new Discord.WebhookClient({ id: config.botuser.webhooks.power.webhookId, token: config.botuser.webhooks.power.webhookToken })
 	console.log(chalk.redBright.bold(`Recieved shutdown command (SIGINT)! Powering down..`))
 
 	if(config.env === `prod`) {
@@ -58,7 +58,7 @@ process.on('SIGINT', async () => {
 
 // Uncaught Exception Handler
 process.on('uncaughtException', async (error) => {
-	var webhookClient = new Discord.WebhookClient({ id: config.botuser.webhooks.classic.webhookId, token: config.botuser.webhooks.classic.webhookToken })
+	var webhookClient = new Discord.WebhookClient({ id: config.botuser.webhooks.errors.webhookId, token: config.botuser.webhooks.errors.webhookToken })
 	console.log(chalk.redBright.bold(`Uncaught Exception Detected!\n${error}`))
 
 	const uncaughtEmbed = new Discord.MessageEmbed()

@@ -20,7 +20,7 @@ module.exports = {
         .setTitle(`SplitStat has started!`)
         .setDescription(`Logged in as **${client.user.tag}.**\nI'm currently in **${client.guilds.cache.size} guilds!**\nEnvironment: **${config.env}**`)
         
-        const webhookClient = new discord.WebhookClient({ id: config.botuser.webhooks.classic.webhookId, token: config.botuser.webhooks.classic.webhookToken })
+        const webhookClient = new discord.WebhookClient({ id: config.botuser.webhooks.power.webhookId, token: config.botuser.webhooks.power.webhookToken })
 
                 webhookClient.send({
                         username: `SplitStat - Starting!`,

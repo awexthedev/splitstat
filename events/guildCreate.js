@@ -10,7 +10,7 @@ module.exports = {
         .setTitle(`New server!`)
         .setDescription(`SplitStat has joined **${guild.name}** at <t:${Math.round(guild.joinedTimestamp / 1000)}:f>!`)
 
-        const webhookClient = new discord.WebhookClient({ id: config.botuser.webhooks.classic.webhookId, token: config.botuser.webhooks.classic.webhookToken })
+        const webhookClient = new discord.WebhookClient({ id: config.botuser.webhooks.guilds.webhookId, token: config.botuser.webhooks.guilds.webhookToken })
 
         webhookClient.send({
             username: `SplitStat - Joined Server!`,
