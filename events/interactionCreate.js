@@ -11,6 +11,8 @@ module.exports = {
 
         if(command.info.deprecated) {
             return await interaction.reply(`Hey, **${interaction.user.tag}**!\nThis command is now **deprecated** and is due to be removed from the bot.\n\n**Date of Deprecation: ${command.info.deprecated.date}**\n**Reason of Deprecation: ${command.info.deprecated.reason}**`)
+        } else if (config.maintenance === true) {
+            return await interaction.reply(`Hey, **${interaction.user.tag}**!\nSplitStat is currently in maintenance mode. This is generally done to push *big* updates that can't be pushed when the bot is on.\nFor updates, **join the Discord server!**\nhttps://dsc.gg/splitstat`)
         } else {
             try {
                 console.log(`${interaction.user.tag} just ran ${command.name} in ${interaction.member.guild}!`)
