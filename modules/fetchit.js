@@ -12,14 +12,22 @@ async function fetchTrnApi(user, platform) {
         } else return module.exports.errmsg = `Need to provide a URL for Steam user!`
     } else var part = user;
 
-    try {
-        var data = await axios.get(`https://public-api.tracker.gg/v2/splitgate/standard/profile/${platform}/${part}`, {
-            method: 'GET',
-            headers: { 'TRN-Api-Key': `${config.botuser.trn_api}` }
-        }) 
-    } catch (error) {
-        return module.exports.errmsg = `User ${user} doesn't exist in Tracker Network's ${platform} API`
-    }
+    // try {
+        // var data = await axios.get(`https://public-api.tracker.gg/v2/splitgate/standard/profile/${platform}/${part}`, {
+        //     method: 'GET',
+        //     headers: { 'TRN-Api-Key': `${config.botuser.trn_api}` }
+        // }) 
+    // } catch (error) {
+    //     return module.exports.errmsg = `User ${user} doesn't exist in Tracker Network's ${platform} API`
+    // }
+
+    var data = await axios.get(`https://public-api.tracker.gg/v2/splitgate/standard/profile/${platform}/${part}`, {
+        method: 'GET',
+        headers: { 'TRN-Api-Key': `${config.botuser.trn_api}` }
+    }) 
+    .catch(function(error) {
+        console.log(error)
+    }) 
 
     module.exports.allObjects = data.data.data
     module.exports.trn = data.data.data.segments[0].stats
