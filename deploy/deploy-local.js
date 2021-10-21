@@ -26,6 +26,7 @@ const rest = new REST({ version: '9' }).setToken(token);
 		);
 
 		console.log(chalk.greenBright.bold('Successfully registered application commands.'));
+		process.exit(0);
 	} catch (error) {
 		console.error(error);
 	}

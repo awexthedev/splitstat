@@ -2,6 +2,30 @@ const Discord = require('discord.js');
 const fs = require('fs');
 const chalk = require('chalk');
 const config = require('./configd.json');
+const redis = require('async-redis');
+const rc = redis.createClient();
+
+rc.on("error", async function(error) {
+	rc.quit();
+	console.log(error)
+
+	var webhookClient = new Discord.WebhookClient({ id: config.botuser.webhooks.errors.webhookId, token: config.botuser.webhooks.errors.webhookToken })
+
+	const redisError = new Discord.MessageEmbed()
+	.setAuthor(`SplitStat Redis`, `http://assets.stickpng.com/images/584830b5cef1014c0b5e4a9c.png`)
+	.setColor(`#cc3227`)
+	.setTitle(`SplitStat - Cache Error!`)
+	.setDescription(`**Redis failed to connect at <t:${Math.round(Date.now() / 1000)}:f>!**\nError: ${error.message}`)
+
+	await webhookClient.send({
+		username: `SplitStat - Redis`,
+		avatarURL: `http://assets.stickpng.com/images/584830b5cef1014c0b5e4a9c.png`,
+		content: `<@288101780074528768>`,
+		embeds: [redisError]
+	})
+
+	process.exit(0);
+})
 
 const client = new Discord.Client({ intents: [Discord.Intents.FLAGS.GUILDS, Discord.Intents.FLAGS.GUILD_MESSAGES] });
 

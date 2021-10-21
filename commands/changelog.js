@@ -15,15 +15,11 @@ module.exports = {
       const changelogEmbed = new discord.MessageEmbed()
       .setAuthor(`SplitStat Bot`, `https://images.mmorpg.com/images/games/logos/32/1759_32.png?cb=87A6A764853AF7668409F25907CC7EC4`)
       .setColor(`#2c1178`)
-      .setTitle(`Latest Changelog - 09/25/2021`)
-      .setDescription(`Dynamic help menu, fixed stuff, and more!\nThis update brings SplitStat to **Version 3.2!**`)
+      .setTitle(`Latest Changelog - 10/21/2021`)
+      .setDescription(`Faster responses!\nThis update brings SplitStat to **Version 3.3!**`)
       .addFields(
-        { name: 'Added usage to help menu', value: `Not *really* important with slash commands but still pretty poggers!` },
-        { name: 'Switched to axios', value: `Zoomy fetching for all!` },
-        { name: 'Implemented some caching', value: `Started caching some results for up to 30 minutes` },
-        { name: 'Rewrote some events', value: 'This helped improve some events.. like.. a *lot*' },
-        { name: 'Completely removed the message event', value: `spl! will no longer return anything!` },
-        { name: 'Added /discord', value: `Gives you the link to a support Discord!` }
+        { name: 'Extra speedy responses!', value: `You should see data response times speeeeed up!` },
+        { name: 'Improved voting system', value: `Only specific to the SplitStat Discord Server, but it should be fixed!`}
       )
       .setFooter(`SplitStat | /discord`)
       .setTimestamp();
