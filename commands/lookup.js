@@ -43,7 +43,7 @@ module.exports = {
         const player = interaction.options.getString('player')
         const category = interaction.options.getString('category')
 
-        await redis.cacheData(player.toLowerCase(), platform)
+        await redis.cacheLookupData(player.toLowerCase(), platform)
 
         var cacheThis = await rc.get(player)
         var value = JSON.parse(cacheThis)

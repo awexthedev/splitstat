@@ -31,7 +31,7 @@ module.exports = {
             const platform = interaction.options.getString(`platform`);
             const player = interaction.options.getString('player');
 
-            await redis.cacheData(player.toLowerCase(), platform);
+            await redis.cacheLookupData(player.toLowerCase(), platform);
 
             var value = await rc.get(player)
             var data = JSON.parse(value)

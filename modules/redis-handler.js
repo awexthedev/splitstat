@@ -4,7 +4,7 @@ const redis = require('async-redis');
 const axios = require('axios').default;
 const rc = redis.createClient();
 
-async function cacheData(user, platform) {
+async function cacheLookupData(user, platform) {
 
     var value = await rc.get(user);
 
@@ -105,7 +105,7 @@ async function cacheData(user, platform) {
                 }
             }
     
-            await rc.set(user, JSON.stringify(obj), 'PX', 15*60000);
+            await rc.set(user, JSON.stringify(obj), 'PX', 30000);
         }) 
         .catch(function(error) {
             console.log(error)
@@ -113,7 +113,76 @@ async function cacheData(user, platform) {
     }
 }
 
-module.exports = { cacheData }
+async function fetchMatchData(user, platform, matchId) {
+    if(platform === `steam`) {
+        if(user.startsWith(`https`) || user.startsWith(`http`)) {
+            var part = user.split("/")[4];
+            if(user.includes(`steamcommunity.com/id/`)) {
+                const response = await axios.get(`https://api.steampowered.com/ISteamUser/ResolveVanityURL/v0001/?key=${config.botuser.steam_api}&vanityurl=${part}`)
+                var part = response.data.response.steamid
+            }
+        }
+    } else var part = user;
 
+    if(matchId) {
+        var data = await axios.get(`https://public-api.tracker.gg/v1/splitgate/matches/${platform}/direct/${matchId}`, {
+            headers: { 'TRN-Api-Key': `${config.botuser.trn_api}` }
+        })
+        .catch(function(error) {
+            console.log(error)
+        })
 
+        let obj = {
+            "username": part,
+            "matchData": {
+                "isWinner": data.data.data.children[0].metadata.isWinner,
+                "points": data.data.data.children[0].metadata.points,
+                "mapImage": data.data.data.metadata.map.imageUrl,
+                "mapDisplay": data.data.data.metadata.map.displayValue,
+                "mode": data.data.data.metadata.mode.displayValue,
+                "playlist": data.data.data.metadata.playlist.displayValue
+            }
+        }
 
+        module.exports.data = obj
+    } else {
+        var data = await axios.get(`https://public-api.tracker.gg/v2/splitgate/standard/matches/${platform}/${part}`, {
+            headers: { 'TRN-Api-Key': `${config.botuser.trn_api}` }
+        })
+            let obj = {
+                "username": part,
+                "matchMetadata": [
+                    {
+                        "id": data.data.data.matches[0].attributes.id,
+                        "mapName": data.data.data.matches[0].metadata.mapName,
+                        "queue": data.data.data.matches[0].metadata.queue
+
+                    },
+                    {
+                        "id": data.data.data.matches[1].attributes.id,
+                        "mapName": data.data.data.matches[1].metadata.mapName,
+                        "queue": data.data.data.matches[1].metadata.queue
+                    },
+                    {
+                        "id": data.data.data.matches[2].attributes.id,
+                        "mapName": data.data.data.matches[2].metadata.mapName,
+                        "queue": data.data.data.matches[2].metadata.queue
+                    },
+                    {
+                        "id": data.data.data.matches[3].attributes.id,
+                        "mapName": data.data.data.matches[3].metadata.mapName,
+                        "queue": data.data.data.matches[3].metadata.queue
+                    },
+                    {
+                        "id": data.data.data.matches[4].attributes.id,
+                        "mapName": data.data.data.matches[4].metadata.mapName,
+                        "queue": data.data.data.matches[4].metadata.queue
+                    },
+                ]
+            }
+
+            module.exports.data = obj
+    }
+}
+
+module.exports = { cacheLookupData, fetchMatchData }
