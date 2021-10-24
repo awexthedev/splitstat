@@ -19,7 +19,8 @@ module.exports = {
       .setDescription(`Faster responses!\nThis update brings SplitStat to **Version 3.3!**`)
       .addFields(
         { name: 'Extra speedy responses!', value: `You should see data response times speeeeed up!` },
-        { name: 'Improved voting system', value: `Only specific to the SplitStat Discord Server, but it should be fixed!`}
+        { name: 'Improved voting system', value: `Only specific to the SplitStat Discord Server, but it should be fixed!` },
+        { name: `Added Medal & Match command`, value: `Medal: returns random Medal clip, powered by the [Medal.tv API](https://docs.medal.tv/api). Also returns recent/specific match data.`}
       )
       .setFooter(`SplitStat | /discord`)
       .setTimestamp();

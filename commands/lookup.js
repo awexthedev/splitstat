@@ -27,10 +27,10 @@ module.exports = {
             .setRequired(true)
             .addChoice('Kills', 'Kills')
             .addChoice('Portals', 'Portals')
-            .addChoice('Special', 'Special')
             .addChoice('Accuracy', 'Accuracy')
             .addChoice('Streaks', 'Streaks')
             .addChoice('Player', 'Player')
+            .addChoice('Playlist', 'Playlist')
     )),
     info: {
         "name": 'Lookup',
@@ -58,14 +58,8 @@ module.exports = {
         switch(category.toLowerCase()) {
             case `kills`:
                 statsEmbed.addFields(
-                    { name: `Kills on Hill`, value: `${value.killData.killsOnHill}`, inline: true},
                     { name: `First Bloods`, value: `${value.killData.firstBloods}`, inline: true },
-                    { name: 'Flag Carrier Kills', value: `${value.killData.flagCarrierKills}`, inline: true },
-                    { name: 'Flag Kills', value: `${value.killData.flagKills}`, inline: true },
                     { name: 'Highest Consecutive Kills', value: `${value.killData.highestConsecutiveKills}`, inline: true },
-                    { name: 'Kills as VIP', value: `${value.killData.killsAsVIP}`, inline: true },
-                    { name: 'Kills on Hill', value: `${value.killData.killsOnHill}`, inline: true },
-                    { name: 'Oddball Kills', value: `${value.killData.oddballKills}`, inline: true },
                     { name: 'Revenge Kills', value: `${value.killData.revengeKills}`, inline: true },
                     { name: 'Kills Per Match', value: `${value.killData.killsPerMatch}`, inline: true }, 
                     { name: 'Kills Per Minute', value: `${value.killData.killsPerMinute}`, inline: true },
@@ -83,18 +77,10 @@ module.exports = {
                     { name: 'Points', value: `${value.playerData.points}`, inline: true },
                     { name: 'Deaths', value: `${value.playerData.deaths}`, inline: true },
                     { name: 'Suicides', value: `${value.playerData.suicides}`, inline: true },
-                    { name: 'Teabags', value: `${value.playerData.teabags}`, inline: true },
-                    { name: 'Damage Dealt', value: `${value.playerData.damageDealt}`, inline: true },
                     { name: 'Matches Played', value: `${value.playerData.matchesPlayed}`, inline: true },
                     { name: 'Wins', value: `${value.playerData.wins}`, inline: true },
                     { name: 'Losses', value: `${value.playerData.losses}`, inline: true },
                     { name: 'Time Played', value: `${value.playerData.timePlayed}`, inline: true },
-                    { name: 'Progression XP', value: `${value.playerData.progressionXp}`, inline: true },
-                    { name: 'Progression Level', value: `${value.playerData.progressionLevel}`, inline: true },
-                    { name: 'Rank XP', value: `${value.playerData.rankXp}`, inline: true },
-                    { name: 'Rank Level', value: `${value.playerData.rankLevel}`, inline: true },
-                    { name: 'Shots Fired', value: `${value.playerData.shotsFired}`, inline: true },
-                    { name: 'Shots Landed', value: `${value.playerData.shotsLanded}`, inline: true }
                 )
                 break;
             case `accuracy`:
@@ -102,17 +88,8 @@ module.exports = {
                     { name: 'Headshots Landed', value: `${value.accuracyData.headshotsLanded}`, inline: true },
                     { name: 'Shots Accuracy', value: `${value.accuracyData.shotsAccuracy}`, inline: true },
                     { name: 'Shots Landed', value: `${value.accuracyData.shotsLanded}`, inline: true },
-                    { name: 'Headshot Accuracy', value: `${value.accuracyData.headshotAccuracy}`, inline: true }
-                )
-                break;
-            case `special`:
-                statsEmbed.addFields(
-                    { name: 'Flags Picked Up', value: `${value.specialData.flagsPickedUp}`, inline: true },
-                    { name: 'Flags Returned', value: `${value.specialData.flagsReturned}`, inline: true },
-                    { name: 'Hills Captured', value: `${value.specialData.hillsCaptured}`, inline: true },
-                    { name: 'Hills Neutralized', value: `${value.specialData.hillsNeutralized}`, inline: true },
-                    { name: 'Oddballs Picked Up', value: `${value.specialData.oddballsPickedUp}`, inline: true },
-                    { name: 'Teabags Denied', value: `${value.specialData.teabagsDenied}`, inline: true }
+                    { name: 'Headshot Accuracy', value: `${value.accuracyData.headshotAccuracy}`, inline: true },
+                    { name: 'Shots Fired', value: `${value.playerData.shotsFired}`, inline: true }
                 )
                 break;
             case `portals`:
@@ -138,6 +115,19 @@ module.exports = {
                     { name: '5 kills', value: `${value.streakData.killstreak1}`, inline: true }
                 )
                 break;
+            case `playlist`:
+                statsEmbed.addFields(
+                    { name: `Oddball Kills`, value: `${value.playlistData.oddballKills}`, inline: true },
+                    { name: `Flag Carrier Kills`, value: `${value.playlistData.flagCarrierKills}`, inline: true },
+                    { name: `Flag Kills`, value: `${value.playlistData.flagKills}`, inline: true },
+                    { name: `Teabags`, value: `${value.playlistData.teabags}`, inline: true },
+                    { name: 'Flags Picked Up', value: `${value.playlistData.flagsPickedUp}`, inline: true },
+                    { name: 'Flags Returned', value: `${value.playlistData.flagsReturned}`, inline: true },
+                    { name: 'Hills Captured', value: `${value.playlistData.hillsCaptured}`, inline: true },
+                    { name: 'Hills Neutralized', value: `${value.playlistData.hillsNeutralized}`, inline: true },
+                    { name: 'Oddballs Picked Up', value: `${value.playlistData.oddballsPickedUp}`, inline: true },
+                    { name: 'Teabags Denied', value: `${value.playlistData.teabagsDenied}`, inline: true }
+                )
         }
 
         return await interaction.reply({ embeds: [statsEmbed] });

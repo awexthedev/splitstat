@@ -22,6 +22,8 @@ module.exports = {
                 .addChoice(`Changelog`, `changelog`)
                 .addChoice(`Complain`, `complain`)
                 .addChoice(`Discord`, `discord`)
+                .addChoice('Match', `match`)
+                .addChoice('Medal', `medal`)
                 .addChoice(`Info`, `info`)),
     async execute(interaction) {
         var option = interaction.options.getString(`command`);

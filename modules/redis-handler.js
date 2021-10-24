@@ -1,6 +1,7 @@
 const config = require('../configd.json');
 
 const redis = require('async-redis');
+const math = require('mathjs');
 const axios = require('axios').default;
 const rc = redis.createClient();
 
@@ -24,16 +25,13 @@ async function cacheLookupData(user, platform) {
             headers: { 'TRN-Api-Key': `${config.botuser.trn_api}` }
         })
         .then(async function(response) {
+
+            var totalTeabags = await math.evaluate(`${response.data.data.segments[0].stats.teabags.value} + ${response.data.data.segments[0].stats.teabagsDenied.value}`)
+
             obj = {
                 "killData": {
-                    "killsOnHill": response.data.data.segments[0].stats.enemyKillsOnHill.value,
                     "firstBloods": response.data.data.segments[0].stats.firstBloods.value,
-                    "flagCarrierKills": response.data.data.segments[0].stats.flagCarrierKills.value,
-                    "flagKills": response.data.data.segments[0].stats.flagKills.value,
                     "highestConsecutiveKills": response.data.data.segments[0].stats.highestConsecutiveKills.value,
-                    "killsAsVIP": response.data.data.segments[0].stats.killsAsVIP.value,
-                    "killsOnHill": response.data.data.segments[0].stats.killsOnHill.value,
-                    "oddballKills": response.data.data.segments[0].stats.oddballKills.value,
                     "revengeKills": response.data.data.segments[0].stats.revengeKills.value,
                     "killsPerMatch": response.data.data.segments[0].stats.killsPerMatch.value,
                     "killsPerMinute": response.data.data.segments[0].stats.killsPerMinute.value,
@@ -43,19 +41,24 @@ async function cacheLookupData(user, platform) {
                     "assists": response.data.data.segments[0].stats.assists.value,
                     "kills": response.data.data.segments[0].stats.kills.value
                 },
-                "accuracyData": {
-                    "headshotsLanded": response.data.data.segments[0].stats.headshotsLanded.value,
-                    "shotsAccuracy": response.data.data.segments[0].stats.shotsAccuracy.value,
-                    "shotsLanded": response.data.data.segments[0].stats.shotsLanded.value,
-                    "headshotAccuracy": response.data.data.segments[0].stats.headshotAccuracy.value
-                },
-                "specialData": {
+                "playlistData": {
+                    "oddballKills": response.data.data.segments[0].stats.oddballKills.value,
+                    "flagCarrierKills": response.data.data.segments[0].stats.flagCarrierKills.value,
+                    "flagKills": response.data.data.segments[0].stats.flagKills.value,
+                    "killsOnHill": response.data.data.segments[0].stats.killsOnHill.value,
+                    "teabags": `${response.data.data.segments[0].stats.teabags.value}/${totalTeabags}`,
                     "flagsPickedUp": response.data.data.segments[0].stats.flagsPickedUp.value,
                     "flagsReturned": response.data.data.segments[0].stats.flagsReturned.value,
                     "hillsCaptured": response.data.data.segments[0].stats.hillsCaptured.value,
                     "hillsNeutralized": response.data.data.segments[0].stats.hillsNeutralized.value,
                     "oddballsPickedUp": response.data.data.segments[0].stats.oddballsPickedUp.value,
                     "teabagsDenied": response.data.data.segments[0].stats.teabagsDenied.value
+                },
+                "accuracyData": {
+                    "headshotsLanded": response.data.data.segments[0].stats.headshotsLanded.value,
+                    "shotsAccuracy": response.data.data.segments[0].stats.shotsAccuracy.value,
+                    "shotsLanded": response.data.data.segments[0].stats.shotsLanded.value,
+                    "headshotAccuracy": response.data.data.segments[0].stats.headshotAccuracy.value
                 },
                 "portalData": {
                     "portalKills": response.data.data.segments[0].stats.portalKills.value,
@@ -82,18 +85,10 @@ async function cacheLookupData(user, platform) {
                     "points": response.data.data.segments[0].stats.points.value,
                     "deaths": response.data.data.segments[0].stats.deaths.value,
                     "kad": response.data.data.segments[0].stats.kad.value,
-                    "teabags": response.data.data.segments[0].stats.teabags.value,
-                    "damageDealt": response.data.data.segments[0].stats.damageDealt.value,
                     "matchesPlayed": response.data.data.segments[0].stats.matchesPlayed.value,
                     "wins": response.data.data.segments[0].stats.wins.value,
                     "losses": response.data.data.segments[0].stats.losses.value,
                     "timePlayed": response.data.data.segments[0].stats.timePlayed.value,
-                    "progressionXp": response.data.data.segments[0].stats.progressionXp.value,
-                    "progressionLevel": response.data.data.segments[0].stats.progressionLevel.value,
-                    "rankXp": response.data.data.segments[0].stats.rankXp.value,
-                    "rankLevel": response.data.data.segments[0].stats.rankLevel.value,
-                    "shotsFired": response.data.data.segments[0].stats.shotsFired.value,
-                    "shotsLanded": response.data.data.segments[0].stats.shotsLanded.value
                 },
                 "profileData": {
                   "countryCode": response.data.data.userInfo.countryCode,
