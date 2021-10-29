@@ -4,6 +4,8 @@ module.exports = {
     name: `guildDelete`,
     on: true,
     async execute(guild) {
+        if(guild.name === undefined) return;
+
         const webhookClient = new discord.WebhookClient({ id: config.botuser.webhooks.guilds.webhookId, token: config.botuser.webhooks.guilds.webhookToken })
 
         const leaveEmbed = new discord.MessageEmbed()
