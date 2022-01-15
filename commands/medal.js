@@ -1,9 +1,7 @@
 const discord =  require(`discord.js`);
-const config = require('../configd.json');
-const medal = require('medaltv-wrapper');
+const config = require('../config.json');
+const m = require('medaltv-wrapper');
 const { SlashCommandBuilder } = require('@discordjs/builders');
-
-const axios = require('axios').default;
 
 module.exports = {
     name: 'medal',
@@ -14,23 +12,24 @@ module.exports = {
         "name": "medal",
         "description": "Fetch a random Splitgate Medal Clip, powered by Medal.tv!",
         "image": null,
-        "usage": "/medal"
+        "usage": "/medal",
+        "requireArgs": false
     },
     async execute(interaction) {
-        await medal.trendingClips({
-            apikey: `${config.botuser.medal_api}`,
-            categoryId: `494`,
+        var medal = await m.trendingClips({
+            apikey: `${config.apis.medal}`,
+            categoryId: `splitstat`,
             random: true,
             limit: 1
         })
 
         const clipEmbed = new discord.MessageEmbed()
-        .setAuthor(`${medal.data.credits}`, `https://images.mmorpg.com/images/games/logos/32/1759_32.png?cb=87A6A764853AF7668409F25907CC7EC4`, `${medal.data.directClipUrl}`)
+        .setAuthor({ name: `${medal[0].credits}`, url: `${medal[0].directClipUrl}` })
         .setColor(`#cc8b00`)
-        .setTitle(`${medal.data.contentTitle}`)
-        .setImage(`${medal.data.contentThumbnail}`)
-        .setFooter(`Likes: ${medal.data.contentLikes} | Views: ${medal.data.contentViews}`)
-        .setTimestamp(medal.data.createdTimestamp);
+        .setTitle(`${medal[0].contentTitle}`)
+        .setImage(`${medal[0].contentThumbnail}`)
+        .setFooter({ text: `Likes: ${medal[0].contentLikes} | Views: ${medal[0].contentViews}`, iconURL: `https://cdn.medal.tv/assets/img/avatars/default.png`})
+        .setTimestamp(medal[0].createdTimestamp);
 
         return await interaction.reply({ embeds: [clipEmbed] })
     }

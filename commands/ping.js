@@ -8,9 +8,10 @@ module.exports = {
         "name": 'Ping',
         "description": "Get the ping of the bot!",
         "image": null,
-        "usage": "/ping"
+        "usage": "/ping",
+        "requireArgs": false
     },
-    async execute(interaction) {
+    async execute(interaction, args) {
         return await interaction.reply('Bot ping: ' + '`' + `${Date.now() - interaction.createdTimestamp}` + 'ms`')
     }
 }

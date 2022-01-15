@@ -1,4 +1,4 @@
-configd.json
+config.json
 node_modules
-server.js
-web.json
+old
+lookup.js

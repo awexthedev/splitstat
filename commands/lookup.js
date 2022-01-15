@@ -1,9 +1,9 @@
-const redis = require('../modules/redis-handler');
+// const redis = require('../modules/redis-handler');
 const { SlashCommandBuilder } = require('@discordjs/builders');
 const discord = require('discord.js');
 
-const redisPack = require('async-redis');
-const rc = redisPack.createClient();
+// const redisPack = require('async-redis');
+// const rc = redisPack.createClient();
 
 module.exports = {
     name: 'lookup',

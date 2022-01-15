@@ -1,43 +1,28 @@
 {
   "name": "splitstat",
-  "version": "3.0.0",
-  "description": "A Splitgate Stat Bot though Discord!",
-  "main": "bot.js",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
   "scripts": {
-    "start": "node deploy/deploy-prod.js && node bot",
-    "dev": "node bot"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/awexxx/splitstat.git"
   },
-  "keywords": [
-    "splitgate",
-    "stats"
-  ],
-  "author": "Awex",
-  "license": "MIT",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
   "bugs": {
     "url": "https://github.com/awexxx/splitstat/issues"
   },
   "homepage": "https://github.com/awexxx/splitstat#readme",
   "dependencies": {
-    "@discordjs/builders": "^0.6.0",
-    "@discordjs/rest": "^0.1.0-canary.0",
-    "async-redis": "^2.0.0",
-    "axios": "^0.22.0",
+    "@discordjs/rest": "^0.2.0-canary.0",
+    "axios": "^0.24.0",
     "chalk": "^4.1.2",
-    "cors": "^2.8.5",
-    "discord-api-types": "^0.23.1",
-    "discord.js": "^13.3.0",
-    "dotenv": "^10.0.0",
-    "epoch-days": "^1.1.1",
-    "express": "^4.17.1",
-    "mathjs": "^9.5.1",
-    "medaltv-wrapper": "^2.0.3",
-    "morgan": "^1.10.0",
-    "node-cache": "^5.1.2",
-    "node-fetch": "^2.6.1",
-    "uuid": "^8.3.2"
+    "discord-api-types": "^0.26.1",
+    "discord.js": "^13.6.0",
+    "medaltv-wrapper": "^3.0.2"
   }
 }

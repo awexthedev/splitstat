@@ -1,6 +1,6 @@
 const discord = require('discord.js');
 const { SlashCommandBuilder } = require('@discordjs/builders');
-const fetching = require('../modules/redis-handler');
+const fetchMatch = require('../modules/fetch_match');
 
 module.exports = {
     name: 'match',
@@ -26,54 +26,72 @@ module.exports = {
               )),
     info: {
         "name": "match",
-        "description": "Search for a specific Match ID! Run without any id argument to see some of your recent matches!",
+        "description": "Search for a specific Match ID! Run without an id to see some of your recent matches!",
         "image": null,
-        "usage": "/match [platform] [player] [id]"
+        "usage": "/match [platform] [player] [id]",
+        "requireArgs": true,
     },
-    async execute(interaction) {
-        const platform = interaction.options.getString(`platform`);
-        const player = interaction.options.getString(`player`);
-        const id = interaction.options.getString(`id`);
+    async execute(interaction, args) {
+        const platform = args[0];
+        const player = args[1];
+        const id = args[2];
+        const valid_platforms = new Set(['xbl', 'psn', 'steam' ]);
+
+        if(!platform || !player) {
+            const recentEmbed = new discord.MessageEmbed()
+            .setAuthor({ name: `SplitStat Bot`, iconURL: `https://cdn.discordapp.com/app-icons/868689248218411050/cfb8eb37a8dcacefc9228d0949667ff1.png` })
+            .setColor(`#2c1178`)
+            .setTitle(`Uh oh!`)
+            .setDescription(`You didn't provide a platform or a player name.`)
+            .setFooter({ text: `SplitStat | Need help? awexxx.xyz/splitstat/discord` })
+            .setTimestamp();
+
+            return interaction.reply({ embeds: [recentEmbed] });
+        } else if (!valid_platforms.has(args[0].toLowerCase())) {
+            const recentEmbed = new discord.MessageEmbed()
+            .setAuthor({ name: `SplitStat Bot`, iconURL: `https://cdn.discordapp.com/app-icons/868689248218411050/cfb8eb37a8dcacefc9228d0949667ff1.png` })
+            .setColor(`#2c1178`)
+            .setTitle(`Uh oh!`)
+            .setDescription(`You didn't provide a valid platform to search on!\nExamples: **xbl**, **psn**, **steam**.`)
+            .setFooter({ text: `SplitStat | Need help? awexxx.xyz/splitstat/discord` })
+            .setTimestamp();
+
+            return interaction.reply({ embeds: [recentEmbed] });
+        }
 
         if(!id) {
-            await fetching.fetchMatchData(player.toLowerCase(), platform);
-
-            var data = fetching.data
-
+            var data = await fetchMatch(null, platform.toLowerCase(), player);
             const recentEmbed = new discord.MessageEmbed()
-            .setAuthor(`SplitStat Bot`, `https://images.mmorpg.com/images/games/logos/32/1759_32.png?cb=87A6A764853AF7668409F25907CC7EC4`)
+            .setAuthor({ name: `${data.username} -- ${platform}`, iconURL: data.avatar })
             .setColor(`#2c1178`)
-            .setTitle(`${data.username} -- ${platform} | Recent Matches`)
+            .setTitle(`Recent Matches`)
             .addFields(
-                { name: `${data.matchMetadata[0].id}`, value: `on ${data.matchMetadata[0].mapName} | ${data.matchMetadata[0].queue}`, inline: true },
-                { name: `${data.matchMetadata[1].id}`, value: `on ${data.matchMetadata[1].mapName} | ${data.matchMetadata[1].queue}`, inline: true },
-                { name: `${data.matchMetadata[2].id}`, value: `on ${data.matchMetadata[2].mapName} | ${data.matchMetadata[2].queue}`, inline: true },
-                { name: `${data.matchMetadata[3].id}`, value: `on ${data.matchMetadata[3].mapName} | ${data.matchMetadata[3].queue}`, inline: true },
-                { name: `${data.matchMetadata[4].id}`, value: `on ${data.matchMetadata[4].mapName} | ${data.matchMetadata[4].queue}`, inline: true }
+                { name: `${data.trn.matches[0].attributes.id}`, value: `on ${data.trn.matches[0].metadata.mapName} | ${data.trn.matches[0].metadata.queue}`, inline: true },
+                { name: `${data.trn.matches[1].attributes.id}`, value: `on ${data.trn.matches[1].metadata.mapName} | ${data.trn.matches[1].metadata.queue}`, inline: true },
+                { name: `${data.trn.matches[2].attributes.id}`, value: `on ${data.trn.matches[2].metadata.mapName} | ${data.trn.matches[2].metadata.queue}`, inline: true },
+                { name: `${data.trn.matches[3].attributes.id}`, value: `on ${data.trn.matches[3].metadata.mapName} | ${data.trn.matches[3].metadata.queue}`, inline: true },
+                { name: `${data.trn.matches[4].attributes.id}`, value: `on ${data.trn.matches[4].metadata.mapName} | ${data.trn.matches[4].metadata.queue}`, inline: true }
             )
-            .setFooter(`SplitStat | /discord`)
+            .setFooter({ text: `SplitStat | Need help? awexxx.xyz/splitstat/discord` })
             .setTimestamp();
 
             await interaction.reply({ embeds: [recentEmbed] })
         } else {
-            await fetching.fetchMatchData(player.toLowerCase(), platform, id);
-
-            console.log(fetching.data)
-            var data = fetching.data
-
+            var data = await fetchMatch(id, platform.toLowerCase(), player);
             const statEmbed = new discord.MessageEmbed()
-            .setAuthor(`SplitStat Bot`, `https://images.mmorpg.com/images/games/logos/32/1759_32.png?cb=87A6A764853AF7668409F25907CC7EC4`)
+            .setAuthor({ name: `${data.username} -- ${platform}`, iconURL: data.avatar })
             .setColor(`#2c1178`)
-            .setTitle(`${data.username} -- ${platform} | Match Stats`)
-            .setImage(`${data.matchData.mapImage}`)
+            .setTitle(`Match Stats`)
+            .setImage(`${data.trn.metadata.map.imageUrl}`)
+            .setThumbnail(data.avatar)
             .addFields(
-                { name: `Map Name`, value: `${data.matchData.mapDisplay}`, inline: true },
-                { name: `Won?`, value: `${data.matchData.isWinner}`, inline: true },
-                { name: `Points`, value: `${data.matchData.points}`, inline: true },
-                { name: `Playlist`, value: `${data.matchData.playlist}`, inline: true },
-                { name: `Mode`, value: `${data.matchData.mode}`, inline: true } 
+                { name: `Map Name`, value: `${data.trn.metadata.map.displayValue}`, inline: true },
+                { name: `Won?`, value: `${data.trn.children[0].metadata.isWinner}`, inline: true },
+                { name: `Points`, value: `${data.trn.children[0].metadata.points}`, inline: true },
+                { name: `Playlist`, value: `${data.trn.metadata.playlist.displayValue}`, inline: true },
+                { name: `Mode`, value: `${data.trn.metadata.mode.displayValue}`, inline: true } 
             )
-            .setFooter(`SplitStat | /discord`)
+            .setFooter({ text: `SplitStat | Need help? awexxx.xyz/splitstat/discord` })
             .setTimestamp();
 
             return await interaction.reply({ embeds: [statEmbed] })
