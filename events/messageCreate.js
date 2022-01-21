@@ -6,7 +6,7 @@ module.exports = {
     name: `messageCreate`,
     on: true,
     async execute(msg) {
-        prefix = `spl!`
+        prefix = `spld!`
         var client = msg.client;
 
         if(msg.content.includes(`<@!${client.user.id}>`)) {

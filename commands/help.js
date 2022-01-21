@@ -1,5 +1,6 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
 const discord = require('discord.js');
+const fs = require('fs')
 
 module.exports = {
     name: 'help',
@@ -17,7 +18,7 @@ module.exports = {
             option.setName(`command`)
                 .setDescription(`Find out how a command works!`)
                 .setRequired(true)
-                // .addChoice(`Lookup`, 'lookup')
+                .addChoice(`Lookup`, 'lookup')
                 // .addChoice(`Profile`, 'profile')
                 .addChoice(`Ping`, `ping`)
                 // .addChoice(`Changelog`, `changelog`)
