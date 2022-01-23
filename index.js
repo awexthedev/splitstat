@@ -2,6 +2,13 @@ const { Client, Collection, Intents } = require('discord.js');
 const fs = require('fs');
 const chalk = require('chalk');
 const config = require('./config.json');
+const db = require('./modules/db');
+
+db(`CREATE TABLE IF NOT EXISTS users (
+    id varchar(255) UNIQUE,
+    gameid varchar(255),
+    dscid varchar(255) UNIQUE
+  )`)
 
 const client = new Client(
     { 
@@ -16,7 +23,7 @@ client.commands = new Collection();
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
 for (const file of commandFiles) {
     const command = require(`./commands/${file}`);
-    client.commands.set(command.data.name, command);
+    client.commands.set(command.name, command);
 }
 
 // Event Handling

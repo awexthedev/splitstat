@@ -19,13 +19,14 @@ module.exports = {
                 .setDescription(`Find out how a command works!`)
                 .setRequired(true)
                 .addChoice(`Lookup`, 'lookup')
-                // .addChoice(`Profile`, 'profile')
+                .addChoice(`Search`, `search`)
+                .addChoice(`Compare`, `compare`)
                 .addChoice(`Ping`, `ping`)
-                // .addChoice(`Changelog`, `changelog`)
-                // .addChoice(`Complain`, `complain`)
+                .addChoice(`Link`, `link`)
+                .addChoice(`Unlink`, `unlink`)
+                .addChoice(`Account`, `account`)
                 .addChoice('Match', `match`)
                 .addChoice('Medal', `medal`)),
-                // .addChoice(`Info`, `info`)),
     async execute(interaction, args) {
         if(!args[0]) {
             return await interaction.reply(`Sorry, no arguments were provided.`)

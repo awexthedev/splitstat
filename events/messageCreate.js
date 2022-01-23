@@ -34,7 +34,7 @@ module.exports = {
 
         // Adds them to the client
         if (availableCommands.includes(command)) {
-            msg.client.commands.get(command).execute(msg, args).catch(function(err) {
+            msg.client.commands.get(command).execute(msg, args, msg.author).catch(function(err) {
                 console.log(`Error thrown in messageCreate event! Command is ${command}\n`, chalk.redBright.bold(err));
                 console.log(err)
 

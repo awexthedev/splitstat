@@ -12,6 +12,9 @@ module.exports = {
 
             try {
                 var cmd = require(`../commands/${interaction.commandName}.js`)
+
+                if(cmd.info.msgonly === true) return interaction.reply(`Sorry, this command is message-only. Please use **spl!${interaction.commandName}**.`)
+
                 if(cmd.info.requireArgs === true) {
                     // Arguments
                     var args = [];
@@ -19,8 +22,8 @@ module.exports = {
                         args.push(interaction.options._hoistedOptions[key].value);
                     });
 
-                    command.execute(interaction, args);
-                } else command.execute(interaction);
+                    command.execute(interaction, args, interaction.user);
+                } else command.execute(interaction, interaction.user);
             } catch (error) {
                 await interaction.reply({ content: 'There was an error while executing this command! This has been sent to Awex!\n**Error:** ' + '`' + error.message + '`' });
 

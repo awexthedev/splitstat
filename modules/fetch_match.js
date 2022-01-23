@@ -1,17 +1,15 @@
 const config = require('../config.json');
 const steam = require('./steam');
 const axios = require('axios');
-module.exports = async (matchId, platform, user) => {    
-    if(platform === 'steam') {
-        var obj = await steam(user)
+module.exports = async (matchId, platform, user, linked) => {    
+    if(platform === 'steam' && linked === false) {
+        obj = await steam(user)
         var part = obj.id;
-    } else if (platform !== 'steam') {
+    } else {
+        var part = user
         obj = {
-            username: user,
-            avatar: null
+            "username": user
         }
-
-        var part = user;
     }
 
     if(matchId) {
@@ -32,7 +30,7 @@ module.exports = async (matchId, platform, user) => {
 
     return {
         username: obj.username,
-        avatar: obj.avatar,
+        avatar: null,
         trn: data.data.data
     };
 }

@@ -77,7 +77,7 @@ module.exports = {
 
             await interaction.reply({ embeds: [recentEmbed] })
         } else {
-            var data = await fetchMatch(id, platform.toLowerCase(), player);
+            var data = await fetchMatch(id, platform.toLowerCase(), player, false);
             const statEmbed = new discord.MessageEmbed()
             .setAuthor({ name: `${data.username} -- ${platform}`, iconURL: data.avatar })
             .setColor(`#2c1178`)

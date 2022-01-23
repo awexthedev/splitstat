@@ -69,7 +69,7 @@ module.exports = {
         }
 
         // Stat Fetch
-        var data = await fetch(platform.toLowerCase(), player)
+        var data = await fetch(platform.toLowerCase(), player, false)
 
         const statsEmbed = new discord.MessageEmbed()
         .setAuthor({ name: `${data.username}'s Stats`, iconURL: data.avatar })

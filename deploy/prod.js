@@ -9,6 +9,8 @@ const commandFiles = fs.readdirSync(__dirname + '/../commands').filter(file => f
 
 for (const file of commandFiles) {
 	const command = require(__dirname + `/../commands/${file}`);
+	if(!command.data || command.info.msgonly === true) continue;
+
 	commands.push(command.data.toJSON());
 }
     var token = config.tokens.prod;

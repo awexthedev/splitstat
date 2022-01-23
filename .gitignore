@@ -2,3 +2,5 @@ config.json
 node_modules
 old
 lookup.js
+commands/run.js
+modules/db.js
