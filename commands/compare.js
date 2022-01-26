@@ -31,7 +31,6 @@ module.exports = {
     },
     async execute(interaction, args, author) {
         var allowed_categories = new Set(['kills', 'portals', 'playlist', 'player', 'accuracy', 'streaks'])
-        console.log(args)
 
         if(args[0].startsWith('<@') && args[0].endsWith('>')) mention = args[0].slice(2, -1).replace('!', '')
         else mention = args[0]
@@ -39,7 +38,6 @@ module.exports = {
         if(args[0]) {
             if(!args[1]) return await interaction.reply(`Sorry, you need to provide a valid category to search.`)
             else if (!allowed_categories.has(args[1].toLowerCase())) return await interaction.reply(`Sorry, you provided a nonexistant category.`)
-            console.log(mention)
                 var user = interaction.client.users.cache.get(mention);
                 if(!user) return await interaction.reply(`Sorry, you provided an invalid user.`);
 

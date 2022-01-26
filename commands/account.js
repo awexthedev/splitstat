@@ -3,23 +3,45 @@ const { SlashCommandBuilder } = require('@discordjs/builders');
 const fetchAcc = require('../modules/linking/fetchAccount');
 const fetchStats = require('../modules/fetch_stats');
 const fetchMatch = require('../modules/fetch_match');
-const link = require('../modules/linking/link_user');
 
 const discord = require('discord.js');
 const axios = require('axios');
 const config = require('../config.json');
 module.exports = {
     name: 'account',
+    data: new SlashCommandBuilder()
+        .setName('account')
+        .setDescription('View your account information!')
+        .addStringOption(option =>
+            option.setName('action')
+                .setDescription(`Action to perform.`)
+                .setRequired(false)
+                .addChoice('Stats', 'stats')
+                .addChoice('Match', 'match'))
+        .addStringOption(option =>
+            option.setName(`category`)
+                .setDescription(`Category to view for stats.`)
+                .setRequired(false)
+                .addChoice('Kills', 'Kills')
+                .addChoice('Portals', 'Portals')
+                .addChoice('Accuracy', 'Accuracy')
+                .addChoice('Streaks', 'Streaks')
+                .addChoice('Player', 'Player')
+                .addChoice('Playlist', 'Playlist'))
+        .addStringOption(option => 
+            option.setName(`id`)
+                .setDescription(`ID of the match to view.`)
+                .setRequired(false)),
     info: {
         "name": 'Account',
         "description": "Access your currently linked account and its features!",
         "image": null,
         "usage": "account [optional stats, optional match] [optional stats category, optional match id]",
-        "requireArgs": true,
-        "msgonly": true
+        "requireArgs": true
     },
     async execute(interaction, args, author) {
         var acc = await fetchAcc(author.id)
+        if(acc === false) return await interaction.reply(`You have not linked your account yet!`);
         var allowed_args = new Set(['stats', 'match', 'friends']);
 
         if(!args[0]) {
@@ -162,6 +184,40 @@ module.exports = {
         
                     return await interaction.reply({ embeds: [statEmbed] })
                 }
+            } else if(args[0] === 'friends') {
+                // Fetch a users friends from sql
+                var friends = await fetchFriends(acc.id);
+                // Create a new embed
+                const friendsEmbed = new discord.MessageEmbed()
+                .setAuthor({ name: `${acc.username} -- ${acc.gameid}`, iconURL: acc.avatar })
+                .setColor(`#2c1178`)
+                .setTitle(`Friends`)
+                .setFooter({ text: `SplitStat | Need help? awexxx.xyz/splitstat/discord` })
+                .setTimestamp();
+
+                // Loop through the friends
+                for(var i = 0; i < friends.length; i++) {
+                    // Add a field for each friend
+                    friendsEmbed.addFields(
+                        { name: `${friends[i].username}`, value: `${friends[i].gameid}`, inline: true }
+                    )
+                }
+
+                // Send the embed
+                return await interaction.reply({ embeds: [friendsEmbed] });
+
+            } else if(args[0] === 'addfriend') {
+                console.log(`add friend`)
+                if(args[1].startsWith('<@') && args[1].endsWith('>')) mention = args[1].slice(2, -1).replace('!', '')
+                else mention = args[1]
+
+                console.log(mention)
+                var add = await friends.store(author.id, mention);
+                // Check if the user exists
+                if(add === false) {
+                    // If the user does not exist, send an error message
+                    return await interaction.reply(`User ${args[1]} does not exist.`);
+                } else return await interaction.reply(`Added ${user.username} to your friends list.`);
             }
         }
     }
