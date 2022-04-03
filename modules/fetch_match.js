@@ -1,10 +1,10 @@
 const config = require('../config.json');
 const steam = require('./steam');
 const axios = require('axios');
-module.exports = async (matchId, platform, user, linked) => {    
-    if(platform === 'steam' && linked === false) {
+module.exports = async (matchId, platform, user) => {    
+    if(platform === 'steam') {
         obj = await steam(user)
-        var part = obj.id;
+        var id = obj.id;
     } else {
         var part = user
         obj = {
@@ -20,7 +20,7 @@ module.exports = async (matchId, platform, user, linked) => {
             console.log(error)
         })
     } else {
-        var data = await axios.get(`https://public-api.tracker.gg/v2/splitgate/standard/matches/${platform}/${part}`, {
+        var data = await axios.get(`https://public-api.tracker.gg/v2/splitgate/standard/matches/${platform}/${part || id}`, {
             headers: { 'TRN-Api-Key': `${config.apis.trn}` }
         })
         .catch(function(error) {
@@ -29,6 +29,7 @@ module.exports = async (matchId, platform, user, linked) => {
     }
 
     return {
+        id,
         username: obj.username,
         avatar: null,
         trn: data.data.data

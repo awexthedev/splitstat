@@ -25,7 +25,7 @@ module.exports = {
             .setColor(`#2c1178`)
             .setTitle(`Help`)
             .setDescription(`Here are all the commands you can use! See /help [command] for more info!`)
-            .setFooter({ text: `SplitStat | Need help? awexxx.xyz/splitstat/discord` });
+            .setFooter({ text: `SplitStat | Need help? thatalex.dev/splitstat` });
             var commands = fs.readdirSync('./commands');
             for(var i = 0; i < commands.length; i++) {
                 var command = require(`./${commands[i]}`);
@@ -51,7 +51,7 @@ module.exports = {
             { name: 'Usage', value: `${command.info.usage}` }
         )
         .setColor(`#2c1178`)
-        .setFooter({ text: `SplitStat | Need help? awexxx.xyz/splitstat/discord` })
+        .setFooter({ text: `SplitStat | Need help? thatalex.dev/splitstat` })
         .setTimestamp();
 
         if(command.info.image !== null) {

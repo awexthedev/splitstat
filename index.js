@@ -2,20 +2,6 @@ const { Client, Collection, Intents } = require('discord.js');
 const fs = require('fs');
 const chalk = require('chalk');
 const config = require('./config.json');
-const db = require('./modules/db');
-
-// Create an SQL table to store a users friends
-db(`CREATE TABLE IF NOT EXISTS friends (
-    pending INT NOT NULL,
-    user_id varchar(255) NOT NULL,
-    friend_id varchar(255) NOT NULL
-)`);
-
-db(`CREATE TABLE IF NOT EXISTS users (
-    id varchar(255) UNIQUE,
-    gameid varchar(255),
-    dscid varchar(255) UNIQUE
-  )`)
 
 const client = new Client(
     { 

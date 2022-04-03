@@ -43,7 +43,7 @@ module.exports = {
             .setColor(`#2c1178`)
             .setTitle(`Uh oh!`)
             .setDescription(`You didn't provide a platform or a player name.`)
-            .setFooter({ text: `SplitStat | Need help? awexxx.xyz/splitstat/discord` })
+            .setFooter({ text: `SplitStat | Need help? thatalex.dev/splitstat` })
             .setTimestamp();
 
             return interaction.reply({ embeds: [recentEmbed] });
@@ -53,7 +53,7 @@ module.exports = {
             .setColor(`#2c1178`)
             .setTitle(`Uh oh!`)
             .setDescription(`You didn't provide a valid platform to search on!\nExamples: **xbl**, **psn**, **steam**.`)
-            .setFooter({ text: `SplitStat | Need help? awexxx.xyz/splitstat/discord` })
+            .setFooter({ text: `SplitStat | Need help? thatalex.dev/splitstat` })
             .setTimestamp();
 
             return interaction.reply({ embeds: [recentEmbed] });
@@ -72,7 +72,7 @@ module.exports = {
                 { name: `${data.trn.matches[3].attributes.id}`, value: `on ${data.trn.matches[3].metadata.mapName} | ${data.trn.matches[3].metadata.queue}`, inline: true },
                 { name: `${data.trn.matches[4].attributes.id}`, value: `on ${data.trn.matches[4].metadata.mapName} | ${data.trn.matches[4].metadata.queue}`, inline: true }
             )
-            .setFooter({ text: `SplitStat | Need help? awexxx.xyz/splitstat/discord` })
+            .setFooter({ text: `SplitStat | Need help? thatalex.dev/splitstat` })
             .setTimestamp();
 
             await interaction.reply({ embeds: [recentEmbed] })
@@ -86,15 +86,20 @@ module.exports = {
             .setThumbnail(data.avatar)
             .addFields(
                 { name: `Map Name`, value: `${data.trn.metadata.map.displayValue}`, inline: true },
-                { name: `Won?`, value: `${data.trn.children[0].metadata.isWinner}`, inline: true },
+                { name: `Won?`, value: `${isWinnerString(data.trn.children[0].metadata.isWinner)}`, inline: true },
                 { name: `Points`, value: `${data.trn.children[0].metadata.points}`, inline: true },
                 { name: `Playlist`, value: `${data.trn.metadata.playlist.displayValue}`, inline: true },
                 { name: `Mode`, value: `${data.trn.metadata.mode.displayValue}`, inline: true } 
             )
-            .setFooter({ text: `SplitStat | Need help? awexxx.xyz/splitstat/discord` })
+            .setFooter({ text: `SplitStat | Need help? thatalex.dev/splitstat` })
             .setTimestamp();
 
             return await interaction.reply({ embeds: [statEmbed] })
+        }
+
+        function isWinnerString(bool) {
+            if (bool) return "Yes";
+            else return "No";
         }
     }
 }

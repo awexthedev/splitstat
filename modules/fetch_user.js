@@ -4,7 +4,7 @@ const steam = require('./steam');
 module.exports = async (platform, user) => {
     if(platform === 'steam') {
         var obj = await steam(user)
-        var part = obj.id;
+        var id = obj.id;
     } else if (platform !== 'steam') {
         obj = {
             username: user,
@@ -14,7 +14,7 @@ module.exports = async (platform, user) => {
         var part = user;
     }
 
-    var data = await axios.get(`https://public-api.tracker.gg/v2/splitgate/standard/search?platform=${platform}&query=${part}`, {
+    var data = await axios.get(`https://public-api.tracker.gg/v2/splitgate/standard/search?platform=${platform}&query=${id || part}`, {
         headers: { 'TRN-Api-Key': `${config.apis.trn}` }
     })
     .catch(function(error) {
@@ -23,6 +23,7 @@ module.exports = async (platform, user) => {
     })
 
     return {
+        id,
         username: obj.username,
         avatar: obj.avatar,
         trn: data.data.data

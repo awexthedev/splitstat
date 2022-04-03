@@ -17,6 +17,4 @@ module.exports = async (id) => {
         "username": profile.data.response.players[0].personaname,
         "avatar": profile.data.response.players[0].avatarfull
     };
-
-    // return 
 }

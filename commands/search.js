@@ -35,7 +35,7 @@ module.exports = {
             .setColor(`#2c1178`)
             .setTitle(`Uh oh!`)
             .setDescription(`You didn't provide a platform or a player name.`)
-            .setFooter({ text: `SplitStat | Need help? awexxx.xyz/splitstat/discord` })
+            .setFooter({ text: `SplitStat | Need help? thatalex.dev/splitstat` })
             .setTimestamp();
 
             return interaction.reply({ embeds: [recentEmbed] });
@@ -45,7 +45,7 @@ module.exports = {
             .setColor(`#2c1178`)
             .setTitle(`Uh oh!`)
             .setDescription(`You didn't provide a valid platform to search on!\nExamples: **xbl**, **psn**, **steam**.`)
-            .setFooter({ text: `SplitStat | Need help? awexxx.xyz/splitstat/discord` })
+            .setFooter({ text: `SplitStat | Need help? thatalex.dev/splitstat` })
             .setTimestamp();
 
             return interaction.reply({ embeds: [recentEmbed] });
@@ -58,7 +58,7 @@ module.exports = {
         .setColor(`#2c1178`)
         .setTitle(`${data.username} was found!`)
         .setDescription(`**${data.username}** plays on ${data.trn[0].platformSlug}. Their user handle is **${data.trn[0].platformUserHandle}**!\nYou can find them [here](https://tracker.gg/splitgate/profile/${platform}/${data.id || data.username}/overview).`)
-        .setFooter({ text: `SplitStat | Need help? awexxx.xyz/splitstat/discord` })
+        .setFooter({ text: `SplitStat | Need help? thatalex.dev/splitstat` })
         .setTimestamp();
 
         return await interaction.reply({ embeds: [userEmbed] });
