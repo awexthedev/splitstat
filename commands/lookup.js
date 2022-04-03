@@ -1,6 +1,7 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
 const discord = require('discord.js');
 const fetch = require('../modules/fetch_stats');
+const err = require('../modules/error');
 const catTypes = require('../modules/types');
 
 module.exports = {
@@ -41,36 +42,14 @@ module.exports = {
         const platform = args[0];
         const player = args[1];
         const category = args[2];
-        const valid_platforms = new Set(['xbl', 'psn', 'steam' ]);
 
-        if(!platform || !player) {
-            const recentEmbed = new discord.MessageEmbed()
-            .setAuthor({ name: `SplitStat Bot`, iconURL: `https://cdn.discordapp.com/app-icons/868689248218411050/cfb8eb37a8dcacefc9228d0949667ff1.png` })
-            .setColor(`#2c1178`)
-            .setTitle(`Uh oh!`)
-            .setDescription(`You didn't provide a platform or a player name.`)
-            .setFooter({ text: `SplitStat | Need help? thatalex.dev/splitstat` })
-            .setTimestamp();
-
-            return interaction.reply({ embeds: [recentEmbed] });
-        } else if (!valid_platforms.has(args[0].toLowerCase())) {
-            const recentEmbed = new discord.MessageEmbed()
-            .setAuthor({ name: `SplitStat Bot`, iconURL: `https://cdn.discordapp.com/app-icons/868689248218411050/cfb8eb37a8dcacefc9228d0949667ff1.png` })
-            .setColor(`#2c1178`)
-            .setTitle(`Uh oh!`)
-            .setDescription(`You didn't provide a valid platform to search on!\nExamples: **xbl**, **psn**, **steam**.`)
-            .setFooter({ text: `SplitStat | Need help? thatalex.dev/splitstat` })
-            .setTimestamp();
-
-            return interaction.reply({ embeds: [recentEmbed] });
-        }
-
-        // Stat Fetch
-        var data = await fetch(platform.toLowerCase(), player, false)
-        var name = data.id || data.username
+        var data = await fetch(platform, player)
+        .catch(function (error) {
+            err.genericHttpError(interaction, error);
+        })
 
         const statsEmbed = new discord.MessageEmbed()
-        .setAuthor({ name: `${data.trn.platformInfo.platformUserHandle}'s Stats`, iconURL: data.avatar, url: "https://tracker.gg/splitgate/profile/" + platform + "/" + name }) 
+        .setAuthor({ name: `${data.trn.platformInfo.platformUserHandle}'s Stats`, iconURL: data.avatar, url: "https://tracker.gg/splitgate/profile/" + platform + "/" + data.id }) 
         .setColor(`#2c1178`)
         .setTitle(`${category} Information`)
         .setFooter({ text: `SplitStat | Need help? thatalex.dev/splitstat` })

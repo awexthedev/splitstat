@@ -25,6 +25,7 @@ module.exports = {
                     command.execute(interaction, args, interaction.user);
                 } else command.execute(interaction, interaction.user);
             } catch (error) {
+                console.log(error)
                 await interaction.reply({ content: 'There was an error while executing this command! This has been sent to Awex!\n**Error:** ' + '`' + error.message + '`' });
 
                 const errorEmbed = new Discord.MessageEmbed()

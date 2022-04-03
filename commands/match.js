@@ -62,7 +62,6 @@ module.exports = {
         if(!id) {
             var data = await fetchMatch(null, platform.toLowerCase(), player);
             const recentEmbed = new discord.MessageEmbed()
-            .setAuthor({ name: `${data.username} -- ${platform}`, iconURL: data.avatar })
             .setColor(`#2c1178`)
             .setTitle(`Recent Matches`)
             .addFields(
@@ -79,7 +78,6 @@ module.exports = {
         } else {
             var data = await fetchMatch(id, platform.toLowerCase(), player, false);
             const statEmbed = new discord.MessageEmbed()
-            .setAuthor({ name: `${data.username} -- ${platform}`, iconURL: data.avatar })
             .setColor(`#2c1178`)
             .setTitle(`Match Stats`)
             .setImage(`${data.trn.metadata.map.imageUrl}`)

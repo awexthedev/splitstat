@@ -10,11 +10,5 @@ module.exports = async (id) => {
         }
     }
 
-    var profile = await axios.get(`http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=${config.apis.steam}&steamids=${steam_id}`)
-
-    return {
-        "id": profile.data.response.players[0].steamid,
-        "username": profile.data.response.players[0].personaname,
-        "avatar": profile.data.response.players[0].avatarfull
-    };
+    return steam_id;
 }

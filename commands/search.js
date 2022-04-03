@@ -57,7 +57,7 @@ module.exports = {
         .setThumbnail(data.avatar)
         .setColor(`#2c1178`)
         .setTitle(`${data.username} was found!`)
-        .setDescription(`**${data.username}** plays on ${data.trn[0].platformSlug}. Their user handle is **${data.trn[0].platformUserHandle}**!\nYou can find them [here](https://tracker.gg/splitgate/profile/${platform}/${data.id || data.username}/overview).`)
+        .setDescription(`**${data.username}** plays on ${data.slug}.\nYou can find them [here](https://tracker.gg/splitgate/profile/${platform}/${data.id}/overview).`)
         .setFooter({ text: `SplitStat | Need help? thatalex.dev/splitstat` })
         .setTimestamp();
 

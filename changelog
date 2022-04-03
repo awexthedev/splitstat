@@ -1,9 +1,6 @@
 04/03/22
-A lot of updates to revive this bot. Like, a lot.
+Few fixups to make this a lil faster
 
-- Made the lookup command slightly more efficient
-- Added Tracker.gg URLs to Embed Authors
-- Fixed invalid Steam API Key error
-- Fixed requests to Tracker failing
-- (for steam users) Fixed issue with search where linked user ID would be user display name
-- Removal of Medal command due to various Medal API issues
+- Removed pointless Steam profile fetch (Tracker already includes this data in their response)
+- Fixed search command issue
+- Rewrote Steam link logic
