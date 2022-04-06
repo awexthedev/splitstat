@@ -3,7 +3,7 @@
 </p></a>
 
 <h3 align="center">SplitStat Discord Bot</h3>
-    <p align="center">><a href="https://dsc.gg/splitstat">Discord</a> - <a href="https://thatalex.dev/splitstatbot/">Invite</a></p>
+    <p align="center"><a href="https://dsc.gg/splitstat">Discord</a> - <a href="https://thatalex.dev/splitstatbot/">Invite</a></p>
 <hr>
 <p align="center">
 <a href="https://top.gg/bot/868689248218411050">
