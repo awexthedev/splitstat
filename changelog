@@ -7,3 +7,6 @@ Some QOL improvements that make my life easier
 04/06/22 - Push 2
 - Fixed extreme issue where SplitStat would crash due to an incorrect JSON key supplied.
 - Removed some packages
+
+04/06/22 - Push 3
+- Added choices back to Help
