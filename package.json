@@ -22,8 +22,6 @@
     "axios": "^0.24.0",
     "chalk": "^4.1.2",
     "discord-api-types": "^0.26.1",
-    "discord.js": "^13.6.0",
-    "medaltv-wrapper": "^3.0.2",
-    "mysql2": "^2.3.3"
+    "discord.js": "^13.6.0"
   }
 }

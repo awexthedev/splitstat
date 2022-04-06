@@ -57,6 +57,7 @@ module.exports = {
 
         var stat = catTypes[category.toLowerCase()];
         for(var i = 0; i < stat.length; i++) {
+            console.log(data.trn.segments[0].stats[stat[i]])
             statsEmbed.addField(data.trn.segments[0].stats[stat[i]].displayName, data.trn.segments[0].stats[stat[i]].displayValue);
         }
 
