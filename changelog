@@ -1,6 +1,5 @@
-04/03/22
-Few fixups to make this a lil faster
-
-- Removed pointless Steam profile fetch (Tracker already includes this data in their response)
-- Fixed search command issue
-- Rewrote Steam link logic
+04/06/22
+Some QOL improvements that make my life easier
+- Addded npm start script to update packages, deploy latest commands & start the bot
+- Merged prod and dev deploy commands to depend on config environment
+- Added example config
