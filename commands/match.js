@@ -1,98 +1,26 @@
-const discord = require('discord.js');
-const { SlashCommandBuilder } = require('@discordjs/builders');
-const fetchMatch = require('../modules/fetch_match');
+const { fetch_match } = require('../modules/stats');
 
 module.exports = {
     name: 'match',
-    data: new SlashCommandBuilder()
-              .setName(`match`)
-              .setDescription(`Get your most recent matches, or check specific ones!`)
-              .addStringOption(option => (
-                  option.setName(`platform`)
-                        .setDescription(`Platform you're on.`)
-                        .setRequired(true)
-                        .addChoice('Xbox', 'xbl')
-                        .addChoice('PlayStation', 'psn')
-                        .addChoice('Steam', 'steam')
-              ))
-              .addStringOption(option => (
-                option.setName(`player`)
-                      .setDescription(`Your ID/Gamertag! For Steam, your Steam Profile URL!`)
-                      .setRequired(true)
-              ))
-              .addStringOption(option => (
-                  option.setName(`id`)
-                        .setDescription(`Specific Match ID to search for`)
-              )),
-    info: {
-        "name": "match",
-        "description": "Search for a specific Match ID! Run without an id to see some of your recent matches!",
-        "image": null,
-        "usage": "/match [platform] [player] [id]",
-        "requireArgs": true,
-    },
-    async execute(interaction, args) {
+    async execute(interaction, args, channelId) {
         const platform = args[0];
         const player = args[1];
         const id = args[2];
-        const valid_platforms = new Set(['xbl', 'psn', 'steam' ]);
+        const validPlatforms = new Set(["xbl", "psn", "steam"]);
 
-        if(!platform || !player) {
-            const recentEmbed = new discord.MessageEmbed()
-            .setAuthor({ name: `SplitStat Bot`, iconURL: `https://cdn.discordapp.com/app-icons/868689248218411050/cfb8eb37a8dcacefc9228d0949667ff1.png` })
-            .setColor(`#2c1178`)
-            .setTitle(`Uh oh!`)
-            .setDescription(`You didn't provide a platform or a player name.`)
-            .setFooter({ text: `SplitStat | Need help? thatalex.dev/splitstat` })
-            .setTimestamp();
-
-            return interaction.reply({ embeds: [recentEmbed] });
-        } else if (!valid_platforms.has(args[0].toLowerCase())) {
-            const recentEmbed = new discord.MessageEmbed()
-            .setAuthor({ name: `SplitStat Bot`, iconURL: `https://cdn.discordapp.com/app-icons/868689248218411050/cfb8eb37a8dcacefc9228d0949667ff1.png` })
-            .setColor(`#2c1178`)
-            .setTitle(`Uh oh!`)
-            .setDescription(`You didn't provide a valid platform to search on!\nExamples: **xbl**, **psn**, **steam**.`)
-            .setFooter({ text: `SplitStat | Need help? thatalex.dev/splitstat` })
-            .setTimestamp();
-
-            return interaction.reply({ embeds: [recentEmbed] });
-        }
+        if (!platform || !player) return interaction.messages.send(channelId, "**You didn't provide a platform, category or player!** Please see **spl!help** for more information.")
+        if(!validPlatforms.has(platform)) return interaction.messages.send(channelId, "**You provided an incorrect platform!** Please make sure you're providing one of the following; `steam, xbl, psn`.")
 
         if(!id) {
-            var data = await fetchMatch(null, platform.toLowerCase(), player);
-            const recentEmbed = new discord.MessageEmbed()
-            .setColor(`#2c1178`)
-            .setTitle(`Recent Matches`)
-            .addFields(
-                { name: `${data.trn.matches[0].attributes.id}`, value: `on ${data.trn.matches[0].metadata.mapName} | ${data.trn.matches[0].metadata.queue}`, inline: true },
-                { name: `${data.trn.matches[1].attributes.id}`, value: `on ${data.trn.matches[1].metadata.mapName} | ${data.trn.matches[1].metadata.queue}`, inline: true },
-                { name: `${data.trn.matches[2].attributes.id}`, value: `on ${data.trn.matches[2].metadata.mapName} | ${data.trn.matches[2].metadata.queue}`, inline: true },
-                { name: `${data.trn.matches[3].attributes.id}`, value: `on ${data.trn.matches[3].metadata.mapName} | ${data.trn.matches[3].metadata.queue}`, inline: true },
-                { name: `${data.trn.matches[4].attributes.id}`, value: `on ${data.trn.matches[4].metadata.mapName} | ${data.trn.matches[4].metadata.queue}`, inline: true }
-            )
-            .setFooter({ text: `SplitStat | Need help? thatalex.dev/splitstat` })
-            .setTimestamp();
+            var data = await fetch_match(null, platform.toLowerCase(), player);
+            const message = `Here are your 3 most recent matches! **Tip:** Add the IDs given to the end of the command you just ran..\n**${data.trn.matches[0].attributes.id} on ${data.trn.matches[0].metadata.mapName}**\n**${data.trn.matches[1].attributes.id} on ${data.trn.matches[1].metadata.mapName}**\n**${data.trn.matches[2].attributes.id} on ${data.trn.matches[2].metadata.mapName}**` 
 
-            await interaction.reply({ embeds: [recentEmbed] })
+            return await interaction.messages.send(channelId, message)
         } else {
-            var data = await fetchMatch(id, platform.toLowerCase(), player, false);
-            const statEmbed = new discord.MessageEmbed()
-            .setColor(`#2c1178`)
-            .setTitle(`Match Stats`)
-            .setImage(`${data.trn.metadata.map.imageUrl}`)
-            .setThumbnail(data.avatar)
-            .addFields(
-                { name: `Map Name`, value: `${data.trn.metadata.map.displayValue}`, inline: true },
-                { name: `Won?`, value: `${isWinnerString(data.trn.children[0].metadata.isWinner)}`, inline: true },
-                { name: `Points`, value: `${data.trn.children[0].metadata.points}`, inline: true },
-                { name: `Playlist`, value: `${data.trn.metadata.playlist.displayValue}`, inline: true },
-                { name: `Mode`, value: `${data.trn.metadata.mode.displayValue}`, inline: true } 
-            )
-            .setFooter({ text: `SplitStat | Need help? thatalex.dev/splitstat` })
-            .setTimestamp();
+            var data = await fetch_match(id, platform.toLowerCase(), player, false);
+            const message = `Here is match id **${id}** on map **${data.trn.metadata.map.displayValue}**!\nDid you win? - ${isWinnerString(data.trn.children[0].metadata.isWinner)}\n**Points** - ${data.trn.children[0].metadata.points}\n**Playlist** - ${data.trn.metadata.playlist.displayValue}\n**Mode** - ${data.trn.metadata.mode.displayValue}` 
 
-            return await interaction.reply({ embeds: [statEmbed] })
+            return await interaction.messages.send(channelId, message);
         }
 
         function isWinnerString(bool) {

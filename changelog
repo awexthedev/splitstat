@@ -1,12 +1,5 @@
-04/06/22
-Some QOL improvements that make my life easier
-- Addded npm start script to update packages, deploy latest commands & start the bot
-- Merged prod and dev deploy commands to depend on config environment
-- Added example config
-
-04/06/22 - Push 2
-- Fixed extreme issue where SplitStat would crash due to an incorrect JSON key supplied.
-- Removed some packages
-
-04/06/22 - Push 3
-- Added choices back to Help
+04/14/22
+- Guilded implementation!
+- Moved to messages for Guilded
+- Removed ping command, requires a bit of work
+- Transferred Guilded bot webhooks

@@ -1,28 +1,27 @@
-const { Client, Collection, Intents } = require('discord.js');
-const fs = require('fs');
-const chalk = require('chalk');
+const { Client } = require('guilded.js');
 const config = require('./config.json');
+const logger = require('./modules/logger');
+const { readdirSync } = require('fs');
+const client = new Client({ token: config.tokens.prod });
 
-const client = new Client(
-    { 
-        intents: [
-            Intents.FLAGS.GUILDS, 
-            Intents.FLAGS.GUILD_MESSAGES
-        ] 
-    });
-
-// Command Handling
-client.commands = new Collection();
-const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
+// client.commands = new Collection();
+const commandFiles = readdirSync('./commands').filter(file => file.endsWith('.js'));
 for (const file of commandFiles) {
     const command = require(`./commands/${file}`);
-    client.commands.set(command.name, command);
+
+    if(config.debug) {
+        logger.debug(file + " command loaded.")
+    }
 }
 
-// Event Handling
-const eventFiles = fs.readdirSync('./events').filter(file => file.endsWith('.js'));
+const eventFiles = readdirSync('./events').filter(file => file.endsWith('.js'));
 for (const file of eventFiles) {
 	const event = require(`./events/${file}`);
+
+    if(config.debug) {
+        logger.debug(file + " event loaded.")
+    }
+
 	if (event.once) {
 		client.once(event.name, (...args) => event.execute(...args));
 	} else {
@@ -30,10 +29,4 @@ for (const file of eventFiles) {
 	}
 }
 
-if(config.env === 'dev') {
-    client.login(config.tokens.dev);
-} else if (config.env === 'prod') {
-    client.login(config.tokens.prod);
-} else {
-    console.log(chalk.redBright.bold('\nSplitStat failed to start!'), `\nUnknown environment "${config.env}".\n`)
-}
+client.login();

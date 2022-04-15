@@ -1,21 +1,9 @@
 {
     "env": "dev/prod",
+    "prefix": "spl!",
     "tokens": {
         "prod": "",
         "dev": ""
-    },
-    "client": {
-        "prod": {
-            "client": ""
-        },
-        "dev": {
-            "guild": "",
-            "client": "",
-            "webhook": {
-                "id": "",
-                "token": ""
-            }
-        }
     },
     "apis": {
         "medal": "",

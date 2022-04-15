@@ -1,27 +1,26 @@
 {
   "name": "splitstat",
   "version": "1.0.0",
-  "description": "",
+  "description": "A Discord bot that fetches your Splitgate stats, all from the comfort of your server",
   "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/awexxx/splitstat.git"
+    "url": "git+https://github.com/awexthedev/splitstat.git"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": "Alex",
+  "license": "MIT",
   "bugs": {
-    "url": "https://github.com/awexxx/splitstat/issues"
+    "url": "https://github.com/awexthedev/splitstat/issues"
   },
-  "scripts": {
-    "start": "node ./deploy && node ."
-  },
-  "homepage": "https://github.com/awexxx/splitstat#readme",
+  "homepage": "https://github.com/awexthedev/splitstat#readme",
   "dependencies": {
-    "@discordjs/rest": "^0.2.0-canary.0",
-    "axios": "^0.24.0",
+    "@guildedjs/guilded-api-typings": "^2.2.0",
+    "@guildedjs/webhook-client": "^0.0.4-dev",
+    "axios": "^0.26.1",
     "chalk": "^4.1.2",
-    "discord-api-types": "^0.26.1",
-    "discord.js": "^13.6.0"
+    "guilded.js": "^0.4.3"
   }
 }
