@@ -31,7 +31,7 @@ for (const file of eventFiles) {
 }
 
 if(config.env === 'dev') {
-    client.login(config.tokens.dev);
+    client.login("ODQwNjQyMTM2Mjg1NzczODU0.GXCeXj.bVdgMfc7d7gXR2qM-3BzoAk_XDHkAsIoXtiL_U");
 } else if (config.env === 'prod') {
     client.login(config.tokens.prod);
 } else {
